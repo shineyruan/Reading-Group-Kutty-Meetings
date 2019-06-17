@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{geometry, amsmath}
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+\begin{document}
+\section{Prediction of the occurrence of one event}
+Suppose the occurrence of one event is $E$. Conversely, $\overline{E}$ means that an event will not happen. \\
+The \emph{sufficient statistic} $\phi(x)$ in this case is $[[x=1], [\overline{x}=1]]$. The two values in this vector should add up to 1.\\
+From our last discussion we can see that this is the sufficient statistic of a categorical distribution (with two buckets), and we can easily find its log-partition function. In this section we introduce two parameters, $b$ and $\delta$. The cost function is now
+\begin{displaymath}
+C(\textbf{q}_t)=(1+\delta)\cdot b \cdot \ln({e^{q_{E,t}/b}+e^{q_{\overline{E},t}/b}})
+\end{displaymath}
+In this section we are also introducing two different kinds of prices $ASK_t$ and $BID_t$.
+\begin{displaymath}
+ASK-BID = \delta
+\end{displaymath}
+\begin{displaymath}
+ASK_t=\frac{(1+\delta)\exp{q_{E,t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
+\end{displaymath}
+\begin{displaymath}
+\overline{ASK}_t=\frac{(1+\delta)\exp{q_{\overline{E},t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
+\end{displaymath}
+\begin{displaymath}
+BID_t=\frac{(1-\delta)\exp{q_{E,t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
+\end{displaymath}
+\begin{displaymath}
+\overline{BID}_t=\frac{(1-\delta)\exp{q_{\overline{E},t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
+\end{displaymath}
+The agent will have a belief $s$ as to what the price should be. If $s>ASK$, then the risk-neutral agent will be inclined to buy. If $s<BID$, then the risk-neutral agent will be inclined to buy. If $s$ is in between these values, then the agent will not do anything. \\
+Upon entering the prediction market, the agent $j$ will have a belief $w_{j,t}$ (in this case the probability that a certain event will occur at time $t$). However this belief will be adjusted by the prices in the market that he or she observes.
+\begin{displaymath}
+x_{j,t}=(1-\theta)(\frac{ASK_t-BID_t}{2})+\theta w_{j,t}
+\end{displaymath}
+A risk neutral agent will have the incentive to move the price in the prediction market to match his or her own expectation. However, the trader is also bounded by his or her own budget.
+\begin{displaymath}
+q_j^{optimal}=b\ln({\frac{x_{j,t}}{1+\delta-x_{j,t}}})+q_{\overline{E},t}-q_{E,t}
+\end{displaymath}
+\begin{displaymath}
+q_j^{budget}=b\ln({\exp(\frac{c+C(\textbf{q}_t)}{b\cdot (1+\delta)})-\exp(\frac{q_{\overline{{E},t}}}{b})})-q_{E,t}
+\end{displaymath}
+The agent will choose $q=min(q_j^{optimal}, q_j^{budget})$ (\emph{given he or she knows how the prediction market works :/}). \\
+Here is a simple example as to how the model works. Suppose
+\begin{displaymath}
+\delta = 0.1
+\end{displaymath}
+\begin{displaymath}
+b = 1
+\end{displaymath}
+Initially $ASK=(1+\delta)/2=1.1/2=0.55$, $BID=(1-\delta)/2=0.45$.
+Now the first agent comes into the market. He thinks the event will happen at a probability of 0.7, and his belief will be adjusted by weight $\theta=0.5$. He, (like all the other agents) has a budget 0.50 dollars.
+\begin{displaymath}
+x_{j,t}=0.5\times (\frac{0.55-0.45}{2})+0.5\times 0.7=0.375
+\end{displaymath}
+\begin{displaymath}
+q_j^{optimal}=b\ln({\frac{x_{j,t}}{1+\delta-x_{j,t}}})+q_{\overline{E},t}-q_{E,t}=\ln({\frac{0.375}{1+0.1-0.375}})+0-0=-0.659
+\end{displaymath}
+\begin{displaymath}
+q_j^{budget}=b\ln({\exp(\frac{c+C(\textbf{q}_t)}{b\cdot (1+\delta)})-\exp(\frac{q_{\overline{{E}},t}}{b})})-q_{E,t}=\ln({\exp(\frac{0.50+1.1\ln(2)}{1+0.1})-1})-0=0.766
+\end{displaymath}
+There the agent will sell 0.659 shares of the $E$. \textbf{But wait he doesn't have any shares yet oh no!}
+
+\end{document}
