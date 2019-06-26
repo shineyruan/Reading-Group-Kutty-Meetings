@@ -2,3 +2,4 @@
 *.log
 *.synctex*
 .vscode
+__*_temp.tex
