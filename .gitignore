@@ -3,3 +3,4 @@
 *.synctex*
 .vscode
 __*_temp.tex
+*.out
