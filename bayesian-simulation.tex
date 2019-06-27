@@ -1,0 +1,32 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{geometry,indentfirst}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+
+\begin{document}
+\begin{center}
+    \textbf{\large Procedures for Bayesian Trader Prediction Market Simulation}
+\end{center}
+
+\begin{itemize}
+    \item Hyperparameters:
+          \begin{itemize}[label=$\circ$]
+              \item A random event $X$ with all kinds of outcome $x$ and some probability distribution $p$;
+              \item Market maker's belief for this event, $p(x;\theta)$. This belief has a general form: \[ p(x;\theta)=\exp\left( \langle\theta,\phi(x)\rangle-T(\theta) \right), \] $T(\theta)$ as the log-partition function.
+              \item Market maker's prior for this event. Prior should be of the form \[ p(\theta;b_0)=\exp\left( \langle n\nu,\theta\rangle+nT(\theta)-\psi(\nu,n) \right), \] where $b_0=\begin{bmatrix}
+                  n\nu\\n
+              \end{bmatrix}$.
+              \item Posterior update: \[ \mathbf{E}_{\theta\sim b_0}\mathbf{E}_{x\sim\theta}[\phi(x)]=\nu, \] therefore $\nu$ is the posterior mean, because posterior is essentially $p(\theta|x)$. \textit{With regards to cost-function prediction market, we can also see that $\nu$ is the price.}
+          \end{itemize}
+    \item Procedures:
+          \begin{enumerate}
+              \item One agent comes into the market and purchase some amount of contracts (securities). Assume the agent possess dataset of size $m$ and mean $\hat{\mu}$.
+              \item Update the posterior mean (the new price): \[\nu'=\frac{n\nu+m\hat{\mu}}{n+m}.\]
+              \item Repeat the above steps until all agents have traded in the market.
+          \end{enumerate}
+\end{itemize}
+
+\end{document}

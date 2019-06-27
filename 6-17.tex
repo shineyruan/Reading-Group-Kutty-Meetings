@@ -7,137 +7,137 @@
 \geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
 
 \begin{document}
-    \section{Bayesian Market Maker (BMM)}
-        \subsection{Prof Kutty's View}
-        \subsection*{Mathematical Background}
-        How do we solve the problem that the eventual price only reflects the expectation of the last agent?
-        \begin{enumerate}
-            \item For the general form of the exponential family distribution:
-            \[ p(x;\theta)=\exp\left(\langle\theta,\phi(x)\rangle-T(\theta)\right), \]
-            the conjugate prior has the form:
-            \[ p(\theta;b_0)=\exp(\langle n\nu,\theta\rangle+nT(\theta)-\psi(\nu,n)). \]
-            \begin{itemize}
-                \item \textbf{Random variable:} $\theta$
-                \item \textbf{Natural parameter:} $b_0=(n\nu,n)$
-            \end{itemize}
-            \item Since it can be verified that \[ \mathbf{E}_{\theta\sim b_0}\mathbf{E}_{x\sim\theta}[\phi(x)]=\nu, \] meaning that $\nu=n\nu/n$ is the posterior mean (\textbf{Why?}), we can think of the initial belief of the market maker based on a ``virtual'' dataset with size $n$ and mean $\nu$.
-        \end{enumerate}
-        \subsection*{Simulation}
-        \begin{enumerate}
-            \item The market maker maintains an initial belief $p(x;\theta)$ parametrized by prior $p(\theta;b_0)$, with $b_0=\begin{bmatrix}
-                n\nu\\n
-            \end{bmatrix}$.
-            \item Each incoming agent has his own belief $\tilde{p}(x;\tilde{\theta})$ parametrized by prior $p(\tilde{\theta};\tilde{b_0})$, with $\tilde{b_0}=\begin{bmatrix}
-                m\hat{\mu}\\m
-            \end{bmatrix}$.
-            \item With each agent completing trade in the market, the posterior of the market maker's belief now has the updated expectation \[ \nu'=\frac{n\nu+m\hat{\mu}}{n+m}. \] This can be viewed as a combination of the two dataset, one of mean $\nu$ and size $n$, and the other of mean $\hat{\mu}$ and size $m$, resulting in a bigger dataset of mean $\nu'$ and size $n+m$.
-            \item Since $\nabla C(\theta)=\mathbf{E}_{p}[\phi(x)]=\mathbf{E}_{\theta\sim b_0}\mathbf{E}_{x\sim\theta}[\phi(x)]$, we know that at any instant, we have the price $$\nabla C(\theta)=\nu'=\frac{n\nu+m\hat{\mu}}{n+m}.$$
-        \end{enumerate}
-        \subsection{Brahma, et al's View [with reference to Das and Magdon-Ismail, 2008]}
-        \subsection*{Assumptions}
-        \begin{itemize}
-            \item The random variable of an event $v$ can take on any value between $[0, V_{max}]$, and the actual outcome is $V$.
-            \item The security in the market has a payoff $V_{max}$ if the event is realized. Combined with the first assumption, in this case, \textit{the price $p_t(v)$ will be the belief for the outcome of the event.}
-            \item Each trader $t$ possesses a noisy estimate $w_t$ of $V$, where $w_t=V+\epsilon_t$, and the random variable $\epsilon_t$ has: \begin{itemize}[label=$\circ$]
-                \item zero mean. Namely, $\mathbf{E}[\epsilon_t]=0$.
-                \item cumulative distribution function $F_\epsilon(x)$. That is, \[ \epsilon_t\sim f_\epsilon(x),\quad F_\epsilon(x)=\int_{-\infty}^{x}f_\epsilon(t)\mathrm{d}t. \]
-            \end{itemize}
-            \item $F_\epsilon(x)$ is symmetric, which means $F_\epsilon(-x)=1-F_\epsilon(x)$.
-        \end{itemize}
-        \subsection*{Simulation}
-        \begin{enumerate}
-            \item At each time $t>0$, the market maker has a belief for the price $p_t(v)$ (and thus the outcome, according to \textit{assumption 1}), and set bid and ask prices $b_t\leq a_t$.
-            \item Each agent will buy at $a_t$ if $w_t>a_t$ (he thinks the security is undervalued) and sell at $b_t$ if $w_t<b_t$ (he thinks the security is overvalued), otherwise he does nothing. 
-            \item If the agent buys, he sends a signal $x_t=+1$; if he does nothing, $x_t=0$; if he sells, $x_t=-1$.
-            \item Assume $q_t(v;b_t,a_t)$ to be the probability of receiving signal $x_t$ given bid and ask prices $(b_t,a_t)$ (\textbf{Why??}), and a straightforward calculation yields (\textbf{Why???}) 
-            \[ q_t(v;b_t,a_t)=\begin{cases}
-                1-F_\epsilon(a_t-v) & x_t=+1,\\
-                F_\epsilon(a_t-v)-F_\epsilon(b_t-v) & x_t=0,\\
-                F_\epsilon(b_t-v) & x_t=-1.
-            \end{cases} \]
-            \item The market maker updates its belief $p_t(v)$ for the price based on the following formula:
-            \[ p_{t+1}(v)=\dfrac{1}{\mathcal{A}_t}p_t(v)q_t(v;b_t,a_t) \] where the normalizing constant $\mathcal{A}_t=\int_{-\infty}^{\infty}p_t(v)q_t(v;b_t,a_t)\mathrm{d}v$.
-            \item For zero-profit (ZP) market maker, the formula for the new bid and ask prices $b_{t+1},a_{t+1}$ are:
-            \[ b_{t+1}=\frac{\int_{-\infty}^{\infty}vp_t(v)F_\epsilon(b_{t+1}-v)\mathrm{d}v}{\int_{-\infty}^{\infty}p_t(v)F_\epsilon(b_{t+1}-v)\mathrm{d}v},\quad a_{t+1}=\frac{\int_{-\infty}^{\infty}vp_t(v)F_\epsilon(v-a_{t+1})\mathrm{d}v}{\int_{-\infty}^{\infty}p_t(v)F_\epsilon(v-a_{t+1})\mathrm{d}v}. \]
-            Solve the two fixed point equations for $b_{t+1},a_{t+1}$ and we can get the new prices (\textbf{Why????}).
-        \end{enumerate}
-   \section{Prediction of the occurrence of one event}
+\section{Bayesian Market Maker (BMM)}
+\subsection{Prof Kutty's View}
+\subsection*{Mathematical Background}
+How do we solve the problem that the eventual price only reflects the expectation of the last agent?
+\begin{enumerate}
+    \item For the general form of the exponential family distribution:
+          \[ p(x;\theta)=\exp\left(\langle\theta,\phi(x)\rangle-T(\theta)\right), \]
+          the conjugate prior has the form:
+          \[ p(\theta;b_0)=\exp(\langle n\nu,\theta\rangle+nT(\theta)-\psi(\nu,n)). \]
+          \begin{itemize}
+              \item \textbf{Random variable:} $\theta$
+              \item \textbf{Natural parameter:} $b_0=(n\nu,n)$
+          \end{itemize}
+    \item Since it can be verified that \[ \mathbf{E}_{\theta\sim b_0}\mathbf{E}_{x\sim\theta}[\phi(x)]=\nu, \] meaning that $\nu=n\nu/n$ is the posterior mean (\textbf{Why?}), we can think of the initial belief of the market maker based on a ``virtual'' dataset with size $n$ and mean $\nu$.
+\end{enumerate}
+\subsection*{Simulation}
+\begin{enumerate}
+    \item The market maker maintains an initial belief $p(x;\theta)$ parametrized by prior $p(\theta;b_0)$, with $b_0=\begin{bmatrix}
+                  n\nu \\n
+              \end{bmatrix}$.
+    \item Each incoming agent has his own belief $\tilde{p}(x;\tilde{\theta})$ parametrized by prior $p(\tilde{\theta};\tilde{b_0})$, with $\tilde{b_0}=\begin{bmatrix}
+                  m\hat{\mu} \\m
+              \end{bmatrix}$.
+    \item With each agent completing trade in the market, the posterior of the market maker's belief now has the updated expectation \[ \nu'=\frac{n\nu+m\hat{\mu}}{n+m}. \] This can be viewed as a combination of the two dataset, one of mean $\nu$ and size $n$, and the other of mean $\hat{\mu}$ and size $m$, resulting in a bigger dataset of mean $\nu'$ and size $n+m$.
+    \item Since $\nabla C(\theta)=\mathbf{E}_{p}[\phi(x)]=\mathbf{E}_{\theta\sim b_0}\mathbf{E}_{x\sim\theta}[\phi(x)]$, we know that at any instant, we have the price $$\nabla C(\theta)=\nu'=\frac{n\nu+m\hat{\mu}}{n+m}.$$
+\end{enumerate}
+\subsection{Brahma, et al's View [with reference to Das and Magdon-Ismail, 2008]}
+\subsection*{Assumptions}
+\begin{itemize}
+    \item The random variable of an event $v$ can take on any value between $[0, V_{max}]$, and the actual outcome is $V$.
+    \item The security in the market has a payoff $V_{max}$ if the event is realized. Combined with the first assumption, in this case, \textit{the price $p_t(v)$ will be the belief for the outcome of the event.}
+    \item Each trader $t$ possesses a noisy estimate $w_t$ of $V$, where $w_t=V+\epsilon_t$, and the random variable $\epsilon_t$ has: \begin{itemize}[label=$\circ$]
+              \item zero mean. Namely, $\mathbf{E}[\epsilon_t]=0$.
+              \item cumulative distribution function $F_\epsilon(x)$. That is, \[ \epsilon_t\sim f_\epsilon(x),\quad F_\epsilon(x)=\int_{-\infty}^{x}f_\epsilon(t)\mathrm{d}t. \]
+          \end{itemize}
+    \item $F_\epsilon(x)$ is symmetric, which means $F_\epsilon(-x)=1-F_\epsilon(x)$.
+\end{itemize}
+\subsection*{Simulation}
+\begin{enumerate}
+    \item At each time $t>0$, the market maker has a belief for the price $p_t(v)$ (and thus the outcome, according to \textit{assumption 1}), and set bid and ask prices $b_t\leq a_t$.
+    \item Each agent will buy at $a_t$ if $w_t>a_t$ (he thinks the security is undervalued) and sell at $b_t$ if $w_t<b_t$ (he thinks the security is overvalued), otherwise he does nothing.
+    \item If the agent buys, he sends a signal $x_t=+1$; if he does nothing, $x_t=0$; if he sells, $x_t=-1$.
+    \item Assume $q_t(v;b_t,a_t)$ to be the probability of receiving signal $x_t$ given bid and ask prices $(b_t,a_t)$ (\textbf{Why??}), and a straightforward calculation yields (\textbf{Why???})
+          \[ q_t(v;b_t,a_t)=\begin{cases}
+                  1-F_\epsilon(a_t-v)                 & x_t=+1, \\
+                  F_\epsilon(a_t-v)-F_\epsilon(b_t-v) & x_t=0,  \\
+                  F_\epsilon(b_t-v)                   & x_t=-1.
+              \end{cases} \]
+    \item The market maker updates its belief $p_t(v)$ for the price based on the following formula:
+          \[ p_{t+1}(v)=\dfrac{1}{\mathcal{A}_t}p_t(v)q_t(v;b_t,a_t) \] where the normalizing constant $\mathcal{A}_t=\int_{-\infty}^{\infty}p_t(v)q_t(v;b_t,a_t)\mathrm{d}v$.
+    \item For zero-profit (ZP) market maker, the formula for the new bid and ask prices $b_{t+1},a_{t+1}$ are:
+          \[ b_{t+1}=\frac{\int_{-\infty}^{\infty}vp_t(v)F_\epsilon(b_{t+1}-v)\mathrm{d}v}{\int_{-\infty}^{\infty}p_t(v)F_\epsilon(b_{t+1}-v)\mathrm{d}v},\quad a_{t+1}=\frac{\int_{-\infty}^{\infty}vp_t(v)F_\epsilon(v-a_{t+1})\mathrm{d}v}{\int_{-\infty}^{\infty}p_t(v)F_\epsilon(v-a_{t+1})\mathrm{d}v}. \]
+          Solve the two fixed point equations for $b_{t+1},a_{t+1}$ and we can get the new prices (\textbf{Why????}).
+\end{enumerate}
+\section{Prediction of the occurrence of one event}
 Suppose the occurrence of one event is $E$. Conversely, $\overline{E}$ means that an event will not happen. \\
 The \emph{sufficient statistic} $\phi(x)$ in this case is $[[x=1], [\overline{x}=1]]$. The two values in this vector should add up to 1.\\
 From our last discussion we can see that this is the sufficient statistic of a categorical distribution (with two buckets), and we can easily find its log-partition function. In this section we introduce two parameters, $b$ and $\delta$. The cost function is now
 \begin{displaymath}
-C(\textbf{q}_t)=(1+\delta)\cdot b \cdot \ln({e^{q_{E,t}/b}+e^{q_{\overline{E},t}/b}})
+    C(\textbf{q}_t)=(1+\delta)\cdot b \cdot \ln({e^{q_{E,t}/b}+e^{q_{\overline{E},t}/b}})
 \end{displaymath}
 In this section we are also introducing two different kinds of prices $ASK_t$ and $BID_t$.
 \begin{displaymath}
-ASK-BID = \delta
+    ASK-BID = \delta
 \end{displaymath}
 \begin{displaymath}
-ASK_t=\frac{(1+\delta)\exp{q_{E,t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
+    ASK_t=\frac{(1+\delta)\exp{q_{E,t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
 \end{displaymath}
 \begin{displaymath}
-\overline{ASK}_t=\frac{(1+\delta)\exp{q_{\overline{E},t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
+    \overline{ASK}_t=\frac{(1+\delta)\exp{q_{\overline{E},t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
 \end{displaymath}
 \begin{displaymath}
-BID_t=\frac{(1-\delta)\exp{q_{E,t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
+    BID_t=\frac{(1-\delta)\exp{q_{E,t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
 \end{displaymath}
 \begin{displaymath}
-\overline{BID}_t=\frac{(1-\delta)\exp{q_{\overline{E},t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
+    \overline{BID}_t=\frac{(1-\delta)\exp{q_{\overline{E},t}/b}}{\exp{q_{E,t}/b}+\exp{q_{\overline{E},t}/b}}
 \end{displaymath}
 The agent will have a belief $s$ as to what the price should be. If $s>ASK$, then the risk-neutral agent will be inclined to buy. If $s<BID$, then the risk-neutral agent will be inclined to sell. If $s$ is in between these values, then the agent will not do anything. \\
 Upon entering the prediction market, agent $j$ will have a belief $w_{j,t}$ (in this case the probability that a certain event will occur at time $t$). However this belief will be adjusted by the prices in the market that he or she observes.
 \begin{displaymath}
-x_{j,t}=(1-\theta)(\frac{ASK_t-BID_t}{2})+\theta w_{j,t}
+    x_{j,t}=(1-\theta)(\frac{ASK_t-BID_t}{2})+\theta w_{j,t}
 \end{displaymath}
 A risk neutral agent will have the incentive to move the price in the prediction market to match his or her own expectation. However, the trader is also bounded by his or her own budget.
 \begin{displaymath}
-q_j^{optimal}=b\ln({\frac{x_{j,t}}{1+\delta-x_{j,t}}})+q_{\overline{E},t}-q_{E,t}
+    q_j^{optimal}=b\ln({\frac{x_{j,t}}{1+\delta-x_{j,t}}})+q_{\overline{E},t}-q_{E,t}
 \end{displaymath}
 \begin{displaymath}
-q_j^{budget}=b\ln({\exp(\frac{c+C(\textbf{q}_t)}{b\cdot (1+\delta)})-\exp(\frac{q_{\overline{{E},t}}}{b})})-q_{E,t}
+    q_j^{budget}=b\ln({\exp(\frac{c+C(\textbf{q}_t)}{b\cdot (1+\delta)})-\exp(\frac{q_{\overline{{E},t}}}{b})})-q_{E,t}
 \end{displaymath}
 The agent will choose $q=min(q_j^{optimal}, q_j^{budget})$ (\textbf{\emph{given he or she knows how the prediction market works :/}}). \\
 Here is a simple example as to how the model works. Suppose
 \begin{displaymath}
-\delta = 0.1
+    \delta = 0.1
 \end{displaymath}
 \begin{displaymath}
-b = 1
+    b = 1
 \end{displaymath}
 Initially $ASK=(1+\delta)/2=1.1/2=0.55$, $BID=(1-\delta)/2=0.45$.
 Now the first agent comes into the market. He thinks the event will happen at a probability of 0.7, and his belief will be adjusted by weight $\theta=0.5$. He, (like all the other agents) has a budget 0.50 dollars.
 \begin{displaymath}
-x_{j,t}=0.5\times (\frac{0.55-0.45}{2})+0.5\times 0.7=0.375
+    x_{j,t}=0.5\times (\frac{0.55-0.45}{2})+0.5\times 0.7=0.375
 \end{displaymath}
 \begin{displaymath}
-q_j^{optimal}=b\ln({\frac{x_{j,t}}{1+\delta-x_{j,t}}})+q_{\overline{E},t}-q_{E,t}=\ln({\frac{0.375}{1+0.1-0.375}})+0-0=-0.659
+    q_j^{optimal}=b\ln({\frac{x_{j,t}}{1+\delta-x_{j,t}}})+q_{\overline{E},t}-q_{E,t}=\ln({\frac{0.375}{1+0.1-0.375}})+0-0=-0.659
 \end{displaymath}
 \begin{displaymath}
-q_j^{budget}=b\ln({\exp(\frac{c+C(\textbf{q}_t)}{b\cdot (1+\delta)})-\exp(\frac{q_{\overline{{E}},t}}{b})})-q_{E,t}=\ln({\exp(\frac{0.50+1.1\ln(2)}{1+0.1})-1})-0=0.766
+    q_j^{budget}=b\ln({\exp(\frac{c+C(\textbf{q}_t)}{b\cdot (1+\delta)})-\exp(\frac{q_{\overline{{E}},t}}{b})})-q_{E,t}=\ln({\exp(\frac{0.50+1.1\ln(2)}{1+0.1})-1})-0=0.766
 \end{displaymath}
 There the agent will sell 0.659 shares of the $E$. \textbf{But wait he doesn't have any shares yet oh no!}
 
-    \section{Prediction Market Simulation}
-        \subsection{Configuring Agents}
-        We will simulate two types of agents.
-        \begin{enumerate}
+\section{Prediction Market Simulation}
+\subsection{Configuring Agents}
+We will simulate two types of agents.
+\begin{enumerate}
     \item \textbf{Noise agent}\\
-    The noise agent has the same budget as everybody else. However, he will come into the market one and spend all his money. The time at which a noise agent comes into the market follows a uniform distribution.
+          The noise agent has the same budget as everybody else. However, he will come into the market one and spend all his money. The time at which a noise agent comes into the market follows a uniform distribution.
     \item \textbf{Strategic  agent}\\
-    A strategic agent comes into the market. The interval between the arrival of agents follow an exponential distribution with parameter $\lambda_r$. When the agent reports his or her belief $x_{j,t}$ based on $w_{j,t}$, the belief is actually his or her true belief at $t-\Delta_t$. $\Delta_t$ follows an exponential distribution parametrized by $\lambda$. In the paper this $\lambda$ distinguishes two types of agents, the informative ones and the less informative ones. The informative agents have a smaller $\lambda$ than the less informed agents.
-    
+          A strategic agent comes into the market. The interval between the arrival of agents follow an exponential distribution with parameter $\lambda_r$. When the agent reports his or her belief $x_{j,t}$ based on $w_{j,t}$, the belief is actually his or her true belief at $t-\Delta_t$. $\Delta_t$ follows an exponential distribution parametrized by $\lambda$. In the paper this $\lambda$ distinguishes two types of agents, the informative ones and the less informative ones. The informative agents have a smaller $\lambda$ than the less informed agents.
+
 \end{enumerate}
-        There are three parameters associated with an agent: $\omega_{j,t},\theta,c$.
-        
-        $\omega_{j,t}$ is the private signal for the agent. It is based on the underlying truth at $t-\Delta t$. For instance, if we want to simulate the prediction market for a basketball game, first we need to retrieve the actual score over time (starting from time point $0$). When we build the simulation (starting from time point $0$), at time point $t$, the private signal of the agent $j$ would be based on the real score at $t-\Delta t$. If the real score for team A and team B at $t-Delta t$ is $S_{team A}:S_{team B}$, then the private signal for the agent at simulation time $t$ might be $S_{team A}/(S_{team A}+S_{team B})$ (if the prediction market is based on event E: team A would win the game and if the agent predicts correctly, the payoff would be \$1).
-        
-        $\theta$ is the weighting parameter affecting the agent's belief. The agent's belief integrates his private signal as well as the current price in the simulation prediction market. The equation is
-        
-        \begin{equation}
-            x_{j,t}=(1-\theta)\left(\frac{ASK_t-BID_t}{2}\right)+\theta\omega_{j,t}
-        \end{equation}
-        
-        $c$ is the budget associated with a single agent. The budget limits the amount of shares the agent buys when he enters the prediction market. Thus, when the last agent enters the market, he could not buy shares without any limit and push the price to exactly what he expects (in this situation, the prediction market fails to aggregate information from all buyers).
-        
-        There are three types of agents in the prediction market: informed agent, less informed agent and noisy agent. Since we simulate the frequency of their arrival by exponential distribution, $\lambda_{informaed}, \lambda_{less\_ informed}$ would be the parameters of exponential distribution for informed and less informed agents. The informed agent has a higher frequency of receiving the information (the actual score),  that is, $\Delta t_{informed}<\Delta t_{less\_informed}$. Both informed and less informed agents belong to strategic agent, that is, the quantity they purchase is $min\{q_{budget}, q_{best}\}$. For noisy agent, they will buy as much as they could, that is, the quantity they purchase will always be $q_{budget}$. 
+There are three parameters associated with an agent: $\omega_{j,t},\theta,c$.
+
+$\omega_{j,t}$ is the private signal for the agent. It is based on the underlying truth at $t-\Delta t$. For instance, if we want to simulate the prediction market for a basketball game, first we need to retrieve the actual score over time (starting from time point $0$). When we build the simulation (starting from time point $0$), at time point $t$, the private signal of the agent $j$ would be based on the real score at $t-\Delta t$. If the real score for team A and team B at $t-Delta t$ is $S_{team A}:S_{team B}$, then the private signal for the agent at simulation time $t$ might be $S_{team A}/(S_{team A}+S_{team B})$ (if the prediction market is based on event E: team A would win the game and if the agent predicts correctly, the payoff would be \$1).
+
+$\theta$ is the weighting parameter affecting the agent's belief. The agent's belief integrates his private signal as well as the current price in the simulation prediction market. The equation is
+
+\begin{equation}
+    x_{j,t}=(1-\theta)\left(\frac{ASK_t-BID_t}{2}\right)+\theta\omega_{j,t}
+\end{equation}
+
+$c$ is the budget associated with a single agent. The budget limits the amount of shares the agent buys when he enters the prediction market. Thus, when the last agent enters the market, he could not buy shares without any limit and push the price to exactly what he expects (in this situation, the prediction market fails to aggregate information from all buyers).
+
+There are three types of agents in the prediction market: informed agent, less informed agent and noisy agent. Since we simulate the frequency of their arrival by exponential distribution, $\lambda_{informaed}, \lambda_{less\_ informed}$ would be the parameters of exponential distribution for informed and less informed agents. The informed agent has a higher frequency of receiving the information (the actual score),  that is, $\Delta t_{informed}<\Delta t_{less\_informed}$. Both informed and less informed agents belong to strategic agent, that is, the quantity they purchase is $min\{q_{budget}, q_{best}\}$. For noisy agent, they will buy as much as they could, that is, the quantity they purchase will always be $q_{budget}$.
 \end{document}
