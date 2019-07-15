@@ -4,25 +4,32 @@
 \geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
 \begin{document}
 \begin{align*}
-  P(x; \mu, \sigma^2) & =\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}                                                       \\
-                      & =\frac{1}{\sqrt{2\pi}}\frac{1}{\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}                                               \\
-                      & =\frac{1}{\sqrt{2\pi}}e^{ln{\frac{1}{\sigma}}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}                                       \\
-                      & =\frac{1}{\sqrt{2\pi}}e^{-ln(\sigma)-\frac{(x-\mu)^2}{2\sigma^2}}                                                    \\
-                      & =\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}+\frac{\mu x}{\sigma^2}-\frac{\mu^2}{2\sigma^2}+ln(\frac{1}{\sigma})} \\
-                      & =\frac{1}{\sqrt{2\pi}}e^{[
-      \frac{\mu}{\sigma^2}\quad-\frac{1}{2\sigma^2}]
-    [x\quad x^2]^T-\left(\frac{\mu^2}{2\sigma^2}+ln\sigma\right)}                                                                            \\
+  P\left(x; \mu, \sigma^2\right) & =\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{\left(x-\mu\right)^2}{2\sigma^2}}                                                        \\
+                                 & =\frac{1}{\sqrt{2\pi}}\frac{1}{\sigma}e^{-\frac{\left(x-\mu\right)^2}{2\sigma^2}}                                                \\
+                                 & =\frac{1}{\sqrt{2\pi}}e^{\ln{\frac{1}{\sigma}}}e^{-\frac{\left(x-\mu\right)^2}{2\sigma^2}}                                       \\
+                                 & =\frac{1}{\sqrt{2\pi}}e^{-\ln\left(\sigma\right)-\frac{\left(x-\mu\right)^2}{2\sigma^2}}                                         \\
+                                 & =\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}+\frac{\mu x}{\sigma^2}-\frac{\mu^2}{2\sigma^2}+\ln\left(\frac{1}{\sigma}\right)} \\
+                                 & =\frac{1}{\sqrt{2\pi}}e^{\left[
+    \frac{\mu}{\sigma^2}\quad-\frac{1}{2\sigma^2}\right]
+  \left[x\quad x^2\right]^T-\left(\frac{\mu^2}{2\sigma^2}+\ln\sigma\right)}                                                                                         \\
 \end{align*}
 
 For
-\begin{equation}\label{final_form}
-  P(x; \mu, \sigma^2)= \frac{1}{\sqrt{2\pi}}e^{[
-      \frac{\mu}{\sigma^2}\quad-\frac{1}{2\sigma^2}]
-    [x\quad x^2]^T-\left(\frac{\mu^2}{2\sigma^2}+ln\sigma\right)}
+\begin{equation}
+  P\left(x; \mu, \sigma^2\right)= \frac{1}{\sqrt{2\pi}}\exp\left( {\begin{bmatrix}
+      \frac{\mu}{\sigma^2} \\-\frac{1}{2\sigma^2}
+    \end{bmatrix}\cdot\begin{bmatrix}
+      x \\x^2
+    \end{bmatrix}
+    -\left(\frac{\mu^2}{2\sigma^2}+\ln\sigma\right)} \right)
+  \label{final_form}
 \end{equation}
 
-In Eq~\ref{final_form}, counting measure is $1/\sqrt{2\pi}$, natural parameter $\eta$ is $[
-      \frac{\mu}{\sigma^2}\quad-\frac{1}{2\sigma^2}]$, sufficient statistics $t(x)$ are $[x\quad x^2]$, $a(\eta)$ is $\left(\frac{\mu^2}{2\sigma^2}+ln\sigma\right)$.
+In Eq (\ref{final_form}), counting measure is $1/\sqrt{2\pi}$, natural parameter $\eta$ is $\begin{bmatrix}
+    \frac{\mu}{\sigma^2} \\-\frac{1}{2\sigma^2}
+  \end{bmatrix}$, sufficient statistic $t(x)$ is $\begin{bmatrix}
+    x \\x^2
+  \end{bmatrix}$, $a(\eta)$ is $\left(\frac{\mu^2}{2\sigma^2}+\ln\sigma\right)$.
 
 \begin{align*}
   \eta_1 & =\frac{\mu}{\sigma^2} \\
@@ -37,8 +44,8 @@ $$
 And,
 
 \begin{align*}
-  a(\eta) & =\left[\frac{(\frac{\eta_1}{2\eta_2})^2}{2(\frac{1}{-2\eta_2})^2}+ln\sqrt{\frac{1}{-2\eta_2}}\right]=-\frac{1}{2}\eta_1^2\frac{1}{2\eta_2}-\frac{1}{2}ln(-2\eta_2) \\
-          & =\frac{\eta_1^2}{4\eta_2}-\frac{1}{2}ln(-2\eta_2)                                                                                                                  \\
+  a(\eta) & =\left[\frac{\left(\frac{\eta_1}{2\eta_2}\right)^2}{2\left(\frac{1}{-2\eta_2}\right)^2}+\ln\sqrt{\frac{1}{-2\eta_2}}\right]=-\frac{1}{2}\eta_1^2\frac{1}{2\eta_2}-\frac{1}{2}\ln\left(-2\eta_2\right) \\
+          & =\frac{\eta_1^2}{4\eta_2}-\frac{1}{2}\ln\left(-2\eta_2\right)                                                                                                                                         \\
 \end{align*}
 
 \end{document}
