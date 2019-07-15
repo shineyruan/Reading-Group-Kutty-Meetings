@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry, amsmath}
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+\begin{document}
+\begin{align*}
+P(x; \mu, \sigma^2)&=\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+&=\frac{1}{\sqrt{2\pi}}\frac{1}{\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+&=\frac{1}{\sqrt{2\pi}}e^{ln{\frac{1}{\sigma}}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\\
+&=\frac{1}{\sqrt{2\pi}}e^{-ln(\sigma)-\frac{(x-\mu)^2}{2\sigma^2}}\\
+&=\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}+\frac{\mu x}{\sigma^2}-\frac{\mu^2}{2\sigma^2}+ln(\frac{1}{\sigma})}\\
+&=\frac{1}{\sqrt{2\pi}}e^{[
+\frac{\mu}{\sigma^2}\quad-\frac{1}{2\sigma^2}]
+[x\quad x^2]^T-\left(\frac{\mu^2}{2\sigma^2}+ln\sigma\right)}\\
+\end{align*}
+
+For
+\begin{equation}\label{final_form}
+  P(x; \mu, \sigma^2)= \frac{1}{\sqrt{2\pi}}e^{[
+\frac{\mu}{\sigma^2}\quad-\frac{1}{2\sigma^2}]
+[x\quad x^2]^T-\left(\frac{\mu^2}{2\sigma^2}+ln\sigma\right)}
+\end{equation}
+
+In Eq~\ref{final_form}, counting measure is $1/\sqrt{2\pi}$, natural parameter $\eta$ is $[
+\frac{\mu}{\sigma^2}\quad-\frac{1}{2\sigma^2}]$, sufficient statistics $t(x)$ are $[x\quad x^2]$, $a(\eta)$ is $\left(\frac{\mu^2}{2\sigma^2}+ln\sigma\right)$.
+
+\begin{align*}
+    \eta_1&=\frac{\mu}{\sigma^2}\\
+    \eta_2&=-\frac{1}{2\sigma^2}
+\end{align*}
+
+Thus, 
+$$
+\mu=\frac{\eta_1}{-2\eta_2}
+$$
+
+And,
+
+\begin{align*}
+a(\eta)&=\left[\frac{(\frac{\eta_1}{2\eta_2})^2}{2(\frac{1}{-2\eta_2})^2}+ln\sqrt{\frac{1}{-2\eta_2}}\right]=-\frac{1}{2}\eta_1^2\frac{1}{2\eta_2}-\frac{1}{2}ln(-2\eta_2)\\
+&=\frac{\eta_1^2}{4\eta_2}-\frac{1}{2}ln(-2\eta_2)\\
+\end{align*}
+
+\end{document}
