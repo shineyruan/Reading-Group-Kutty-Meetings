@@ -4,3 +4,6 @@
 .vscode
 __*_temp.tex
 *.out
+*.fdb*
+*.fls
+*.dvi
