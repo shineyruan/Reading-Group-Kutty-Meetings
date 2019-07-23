@@ -15,17 +15,28 @@
     \item Hyperparameters:
           \begin{itemize}[label=$\circ$]
               \item A random event $X$ with all kinds of outcome $x$ and some probability distribution $p$;
-              \item Market maker's belief for this event, $p(x;\theta)$. This belief has a general form: \[ p(x;\theta)=\exp\left( \langle\theta,\phi(x)\rangle-T(\theta) \right), \] $T(\theta)$ as the log-partition function.
-              \item Market maker's prior for this event. Prior should be of the form \[ p(\theta;b_0)=\exp\left( \langle n\nu,\theta\rangle+nT(\theta)-\psi(\nu,n) \right), \] where $b_0=\begin{bmatrix}
-                  n\nu\\n
-              \end{bmatrix}$.
-              \item Posterior update: \[ \mathbf{E}_{\theta\sim b_0}\mathbf{E}_{x\sim\theta}[\phi(x)]=\nu, \] therefore $\nu$ is the posterior mean, because posterior is essentially $p(\theta|x)$. \textit{With regards to cost-function prediction market, we can also see that $\nu$ is the price.}
+              \item Agent's belief for this event, $p(x;\theta)$. This belief has a general form: \[ p(x;\theta)=\exp\left( \langle\theta,\phi(x)\rangle-T(\theta) \right), \] $T(\theta)$ as the log-partition function.
+                    \\\textbf{\textit{Note.} Agent's belief on the probability distribution of this event is not reflected directly from $p(x;\theta)$. Instead, it will be reflected from its prior, i.e, the distribution of the parameter $\theta$.}
+              \item Agent's prior for this event. Prior should be of the form \[ p(\theta;b_0)=\exp\left( \langle n\nu,\theta\rangle+nT(\theta)-\psi(\nu,n) \right), \] where $b_0=\begin{bmatrix}
+                            n\nu \\n
+                        \end{bmatrix}$.
           \end{itemize}
     \item Procedures:
           \begin{enumerate}
-              \item One agent comes into the market and purchase some amount of contracts (securities). Assume the agent possess dataset of size $m$ and mean $\hat{\mu}$.
-              \item Update the posterior mean (the new price): \[\nu'=\frac{n\nu+m\hat{\mu}}{n+m}.\]
+              \item According to the current outstanding shares and the cost function, assume the current market price for the security (contract) is $$\nabla C(\theta)=\nu.$$
+              \item One agent comes into the market with some prior $p(\theta;b_0)$ where $b_0=\begin{bmatrix}
+                            n\nu \\n
+                        \end{bmatrix}$.
+              \item He is provided with a \textit{private} set of data points of size $m$ and mean $\hat{\mu}$.
+              \item His posterior belief $p(\theta;b_1)$ is updated to be of same form but $b_1=\begin{bmatrix}
+                            n\nu+m\hat{\mu} \\n+m
+                        \end{bmatrix}$.
+              \item He would like to buy/sell some number $\delta$ of security (contract) such that $$\nabla C(\theta+\delta)=\dfrac{n\nu+\hat{\mu}}{n+1}.$$
               \item Repeat the above steps until all agents have traded in the market.
+          \end{enumerate}
+    \item Questions and concerns:
+          \begin{enumerate}
+              \item Why is the fact that every agent would have a prior with a parameter such that \textbf{its first entry is always $\nu$ times larger than the second entry?}
           \end{enumerate}
 \end{itemize}
 
