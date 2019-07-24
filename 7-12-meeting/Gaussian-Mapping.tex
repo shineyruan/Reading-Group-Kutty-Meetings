@@ -1,8 +1,9 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
-\usepackage{geometry, amsmath}
+\usepackage{geometry, amsmath, times}
 \geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
 \begin{document}
+\section*{Calculate $p(x;\theta)$ in terms of Gaussian distribution, with known $\sigma^2$}
 \begin{align*}
   P\left(x; \mu, \sigma^2\right) & =\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{\left(x-\mu\right)^2}{2\sigma^2}}                                                        \\
                                  & =\frac{1}{\sqrt{2\pi}}\frac{1}{\sigma}e^{-\frac{\left(x-\mu\right)^2}{2\sigma^2}}                                                \\
@@ -11,10 +12,10 @@
                                  & =\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2\sigma^2}+\frac{\mu x}{\sigma^2}-\frac{\mu^2}{2\sigma^2}+\ln\left(\frac{1}{\sigma}\right)} \\
                                  & =\frac{1}{\sqrt{2\pi}}e^{\left[
     \frac{\mu}{\sigma^2}\quad-\frac{1}{2\sigma^2}\right]
-  \left[x\quad x^2\right]^T-\left(\frac{\mu^2}{2\sigma^2}+\ln\sigma\right)}                                                                                         \\
+  \left[x\quad x^2\right]^T-\left(\frac{\mu^2}{2\sigma^2}+\ln\sigma\right)}
 \end{align*}
 
-For
+Therefore
 \begin{equation}
   P\left(x; \mu, \sigma^2\right)= \frac{1}{\sqrt{2\pi}}\exp\left( {\begin{bmatrix}
       \frac{\mu}{\sigma^2} \\-\frac{1}{2\sigma^2}
@@ -29,23 +30,44 @@ In Eq (\ref{final_form}), counting measure is $1/\sqrt{2\pi}$, natural parameter
     \frac{\mu}{\sigma^2} \\-\frac{1}{2\sigma^2}
   \end{bmatrix}$, sufficient statistic $t(x)$ is $\begin{bmatrix}
     x \\x^2
-  \end{bmatrix}$, $a(\eta)$ is $\left(\frac{\mu^2}{2\sigma^2}+\ln\sigma\right)$.
-
-\begin{align*}
-  \eta_1 & =\frac{\mu}{\sigma^2} \\
-  \eta_2 & =-\frac{1}{2\sigma^2}
-\end{align*}
-
-Thus,
+  \end{bmatrix}$, log-partition function $a(\eta)$ is $\left(\frac{\mu^2}{2\sigma^2}+\ln\sigma\right)$. Since \[\eta_1 =\frac{\mu}{\sigma^2}\qquad \eta_2 =-\frac{1}{2\sigma^2},\] thus,
 $$
-  \mu=\frac{\eta_1}{-2\eta_2}
+  \mu=\frac{\eta_1}{-2\eta_2}.
 $$
 
 And,
-
 \begin{align*}
   a(\eta) & =\left[\frac{\left(\frac{\eta_1}{2\eta_2}\right)^2}{2\left(\frac{1}{-2\eta_2}\right)^2}+\ln\sqrt{\frac{1}{-2\eta_2}}\right]=-\frac{1}{2}\eta_1^2\frac{1}{2\eta_2}-\frac{1}{2}\ln\left(-2\eta_2\right) \\
           & =\frac{\eta_1^2}{4\eta_2}-\frac{1}{2}\ln\left(-2\eta_2\right)                                                                                                                                         \\
+\end{align*}
+
+\newpage
+\section*{Calculate $p(\theta;b_0)$ in terms of Gaussian distribution, with known $\sigma^2$}
+
+In this setting, the prior becomes $P\left( \mu;m,v^2 \right)$ since $\sigma$ is known. We have
+\begin{align*}
+  P\left( \mu;m,v^2 \right) & =\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{(\mu-m)^2}{2v^2} \right)                                                                                                                                                                              \\
+                            & =\frac{1}{\sqrt{2\pi}}\exp\left( -\ln v-\frac{(\mu-m)^2}{2v^2} \right)                                                                                                                                                                         \\
+                            & =\frac{1}{\sqrt{2\pi}}\exp\left( -\ln v-\frac{\mu^2}{2v^2}+\frac{m}{v^2}\mu-\frac{m^2}{2v^2} \right)                                                                                                                                           \\
+                            & =\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{\sigma^2}{v^2}\begin{bmatrix}
+      -m \\-m^2
+    \end{bmatrix}\cdot\begin{bmatrix}
+      \frac{\mu}{\sigma^2} \\-\frac{1}{2\sigma^2}
+    \end{bmatrix}+\left( -\frac{\sigma^2}{v^2}\right)\left( \frac{\mu^2}{2\sigma^2}+\ln\sigma \right)+\frac{\sigma^2}{v^2}\ln\sigma-\ln v  \right)
+\end{align*}
+
+Therefore we have \[P\left( \mu;m,v^2 \right)=\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{\sigma^2}{v^2}\begin{bmatrix}
+      -m \\-m^2
+    \end{bmatrix}\cdot\begin{bmatrix}
+      \frac{\mu}{\sigma^2} \\-\frac{1}{2\sigma^2}
+    \end{bmatrix}+\left( -\frac{\sigma^2}{v^2}\right)\left( \frac{\mu^2}{2\sigma^2}+\ln\sigma \right)+\frac{\sigma^2}{v^2}\ln\sigma-\ln v  \right).\]
+Since $P(\mu;m,v^2)$ can also be parametrized by \[ p(\theta;b_0)=\exp\left( \langle n\nu,\theta\rangle+nT(\theta)-\psi(\nu,n) \right), \] we can see that
+\begin{align*}
+  n           & =-\frac{\sigma^2}{v^2},              \\
+  \nu         & =\begin{bmatrix}
+    -m \\-m^2
+  \end{bmatrix},         \\
+  \psi(\nu,n) & =\ln v-\frac{\sigma^2}{v^2}\ln\sigma.
 \end{align*}
 
 \end{document}
