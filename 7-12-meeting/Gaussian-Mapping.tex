@@ -46,30 +46,35 @@ And,
 
 In this setting, the prior becomes $P\left( \mu;m,v^2 \right)$ since $\sigma$ is known. We have
 \begin{align*}
-  P\left( \mu;m,v^2 \right) & =\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{(\mu-m)^2}{2v^2} \right)                                                                                                                                                                              \\
-                            & =\frac{1}{\sqrt{2\pi}}\exp\left( -\ln v-\frac{(\mu-m)^2}{2v^2} \right)                                                                                                                                                                         \\
-                            & =\frac{1}{\sqrt{2\pi}}\exp\left( -\ln v-\frac{\mu^2}{2v^2}+\frac{m}{v^2}\mu-\frac{m^2}{2v^2} \right)                                                                                                                                           \\
-                            & =\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{\sigma^2}{v^2}\begin{bmatrix}
-      -m \\-m^2
+  P\left( \mu;m,v^2 \right) & =\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{(\mu-m)^2}{2v^2} \right)                                                                      \\
+                            & =\frac{1}{\sqrt{2\pi}}\exp\left( -\ln v-\frac{(\mu-m)^2}{2v^2} \right)                                                                 \\
+                            & =\frac{1}{\sqrt{2\pi}}\exp\left( -\ln v-\frac{\mu^2}{2v^2}+\frac{m}{v^2}\mu-\frac{m^2}{2v^2} \right)                                   \\
+                            & =\frac{1}{\sqrt{2\pi}}\exp\left( \begin{bmatrix}
+      \frac{m}{v^2} \\-\frac{1}{2v^2}
     \end{bmatrix}\cdot\begin{bmatrix}
-      \frac{\mu}{\sigma^2} \\-\frac{1}{2\sigma^2}
-    \end{bmatrix}+\left( -\frac{\sigma^2}{v^2}\right)\left( \frac{\mu^2}{2\sigma^2}+\ln\sigma \right)+\frac{\sigma^2}{v^2}\ln\sigma-\ln v  \right)
+      \mu \\\mu^2
+    \end{bmatrix}-\left( \ln v+\frac{m^2}{2v^2} \right) \right)
 \end{align*}
 
-Therefore we have \[P\left( \mu;m,v^2 \right)=\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{\sigma^2}{v^2}\begin{bmatrix}
-      -m \\-m^2
+Therefore we have \[P\left( \mu;m,v^2 \right)=\frac{1}{\sqrt{2\pi}}\exp\left( \begin{bmatrix}
+      \frac{m}{v^2} \\-\frac{1}{2v^2}
     \end{bmatrix}\cdot\begin{bmatrix}
-      \frac{\mu}{\sigma^2} \\-\frac{1}{2\sigma^2}
-    \end{bmatrix}+\left( -\frac{\sigma^2}{v^2}\right)\left( \frac{\mu^2}{2\sigma^2}+\ln\sigma \right)+\frac{\sigma^2}{v^2}\ln\sigma-\ln v  \right).\]
-Since $P(\mu;m,v^2)$ can also be parametrized by \[ P(\mu;n,\nu)=\exp\left( \langle n\nu,\theta\rangle+nT(\theta)-\psi(\nu,n) \right), \] we can see that
+      \mu \\\mu^2
+    \end{bmatrix}-\left( \ln v+\frac{m^2}{2v^2} \right) \right).\]
+Since $P(\mu;m,v^2)$ can also be parametrized by
 \begin{align*}
-  n           & =-\frac{\sigma^2}{v^2},              \\
-  \nu         & =\begin{bmatrix}
-    -m \\-m^2
-  \end{bmatrix},         \\
-  \psi(\nu,n) & =\ln v-\frac{\sigma^2}{v^2}\ln\sigma.
+  P(\mu;n,\nu) & =\exp\left( \langle n\nu,\theta\rangle+nT(\theta)-\psi(\nu,n) \right)                      \\
+               & =\exp\left( \begin{bmatrix}
+    n\nu \\n
+  \end{bmatrix}\cdot\begin{bmatrix}
+    \theta \\T(\theta)
+  \end{bmatrix}-\psi(\nu,n) \right),
+\end{align*} we can see that
+\begin{align*}
+  n           & =-\frac{1}{2v^2},         \\
+  \nu         & =-2m                     \\
+  \psi(\nu,n) & =\ln v+\frac{m^2}{2v^2}.
 \end{align*}
 
-\paragraph{Questions and Concerns.} According to the derivation, the 2\textsuperscript{nd} entry of $\nu$ (which in this case is $-m^2$) can literally be anything since $\psi(\nu,n)$ can be anything. How can we determine what the entry should be? Is it really $-m^2$?
 
 \end{document}
