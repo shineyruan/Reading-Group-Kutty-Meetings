@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{times}
 \usepackage{geometry,indentfirst}
-\usepackage{amsmath}
+\usepackage{amsmath,amssymb,bm}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
@@ -20,8 +20,30 @@
 
 \newpage
 \section{Scoring Rules}
+Scoring rules is the simplest form of prediction mechanism. For every agent with some information, a scoring rule evaluates how close the information is from the actual outcome, and pays the agent in return for his/her information.
+
+\subsection{Motivations}
+Taking an event $\mathbf{X}$ with outcome space $\mathcal{X}$, we want to know something about each agent's belief $p(\mathbf{x})$ on the actual outcome $\mathbf{x}\in \mathcal{X}$, compare it with the actual outcome, and see how accurate the agent's prediction is. However, it is impossible to ask agent for his/her entire $p(\mathbf{x})$ probability distribution. What should we do?
+
+We've already known that sufficient statistic is a very suitable parameter to characterize a probability distribution. Therefore, we can use it to represent agent's belief. We just ask each agent for the sufficient statistic $\mathbf{u}(\mathbf{x})$ as a representation of his/her belief $p(\mathbf{x})$. Then we are able to measure how accurate the agent can predict with a scoring rule based on the actual outcome.
+
+Assume $\bm{\hat{\mu}}=\mathbb{E}_p[\mathbf{u}(\mathbf{x})]$ is the \textit{expected} sufficient statistic from agent's belief $p(\mathbf{x})$. Then, with the actual outcome denoted $\mathbf{x}$, the scoring rule takes the form:
+\[S(\bm{\hat{\mu}},\mathbf{x}).\]
+We can see that the scoring rule is a measure of how close the agent's belief is from the actual outcome.
+
+\subsection{Incentive Compatibility}
+\textbf{Incentive compatibility} is a property of prediction mechanism with which the best strategy for an agent to earn the most profit is to \textit{honestly} report all the information as soon as he/she has it. As a prediction mechanism, a proper scoring rule should leverage \textbf{incentive compatibility} in order to get real information from agents.
+
+Assume that we already set the sufficient statistic to be $\mathbf{u}(\mathbf{x})$. Then for each $p\in \mathcal{P}$ that takes this $\mathbf{u}(\mathbf{x})$ as its sufficient statistic, we can calculate its \textit{expected} sufficient statistic $\bm{\mu}=\mathbb{E}_p[\mathbf{u}(\mathbf{x})]$. A scoring rule is thus called \textbf{proper} if it satisfies the following, for all such $p$, for all $\bm{\hat{\mu}}\neq\bm{\mu}$:
+\[\mathbb{E}_p[S(\bm{\mu},\mathbf{x})]\geqslant \mathbb{E}_p[S(\bm{\hat{\mu}},\mathbf{x})].\]
+Any scoring rule with this property actually encourages agents to report a probability distribution as close to the actual probability distribution of $\mathbf{X}$ as possible, which is in accordance with the essence of incentive compatibility.
+
+\subsection{Logarithmic Scoring Rule}
+Suppose that we have set a form of the sufficient statistic. A classic logarithmic scoring rule takes the form:
+\[S(\bm{\mu},\mathbf{x})=\ln p(\mathbf{x};\bm{\mu}),\]
+where $\bm{\mu}=\mathbb{E}_p[\mathbf{u}(\mathbf{x})]$ is the expected sufficient statistic over $p(\mathbf{x};\bm{\mu})$.
 
 \newpage
-\section{Cost Function Prediction Market with Bayesian Traders}
+\section{Cost Function based Prediction Market with Bayesian Traders}
 
 \end{document}
