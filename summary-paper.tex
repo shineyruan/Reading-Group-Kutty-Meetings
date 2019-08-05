@@ -19,7 +19,144 @@
 
 \newpage
 \section{Exponential Family}
+Distributions over $\textbf{x}$ with $\emph{natural parameters}$ $\bm{\eta}$ that are of the form
+\begin{equation}\label{eq:expo_fam}
+p(\textbf{x}\mid\bm{\eta})=h(\mathbf{x})g(\bm{\eta})\exp(\bm{\eta}^T\textbf{u}(\textbf{x}))
+\end{equation}
+We need to make sure that
+$\int{p(\textbf{x}\mid\bm{\eta})}d\bm{x}=1$, therefore 
+\begin{equation}\label{eq:normalize}
+g(\bm{\eta})\int{h(\textbf{x})\exp\{\bm{\eta}^T\textbf{u(\textbf{x})}\}}d\textbf{x}=1
+\end{equation}
+$g(\bm{\eta})$ is a coefficient that is needed to ensure that the distribution is normalized.
+\subsection{Sufficient Statistics}
+If we take the partial derivative with respect to $\bm{\eta}$ from both sides of equation \ref{eq:normalize}, we have
+\begin{equation}\label{eq:derivative}
+\nabla g(\bm{\eta})\int{h(\textbf{x})\exp\{\bm{\eta}^T\textbf{u}(\textbf{x})\}}d\textbf{x} + g(\bm{\eta})\int{h(\textbf{x})\exp\{\bm{\eta}^T\textbf{u}(\textbf{x})\}}\textbf{u}(\textbf{x})d\textbf{x}=0
+\end{equation}
+If we plug in \ref{eq:normalize} to \ref{eq:derivative}, we have
+\begin{equation}
+    -\frac{1}{g(\bm{\eta})}\nabla g(\bm{\eta})=g(\bm{\eta})\int{h(\textbf{x})\exp\{\bm{\eta}^T\textbf{u}(\textbf{x})\}}\textbf{u}(\textbf{x})d\textbf{x}=\mathbb{E}[\textbf{u}(\textbf{x})]
+\end{equation}
+Since
+\begin{displaymath}
+\nabla \ln{g(\bm{\eta})} = \frac{1}{g(\bm{\eta})}\nabla g(\bm{\eta})
+\end{displaymath}
+It can be deduced that
+\begin{equation}
+    -\nabla \ln{g(\bm{\eta})} = \mathbb{E}[\textbf{u}(\textbf{x})]
+\end{equation}
+If we consider a set of independent identically distributed data denoted by $\textbf{X}=\{\textbf{x}_1,\dots,\textbf{x}_n\}$, the likelihood function is given by
+\begin{equation}\label{eq:likelihood}
+    p(\textbf{X}\mid\bm{\eta})=\Big(\prod_{n=1}^{N}h(\textbf{x}_n)\Big)g(\bm{\eta})^N\exp\Big\{\bm{\eta}^T\sum_{n=1}^N\textbf{u}(\textbf{x}_n)\Big\}
+\end{equation}
+To produce the maximum likelihood estimator $\bm{\eta}_{ML}$, we need to take the partial derivative of \ref{eq:likelihood} and set its value to 0.
+\begin{equation}\label{eq:maximum_likelihood}
+    \nabla \bigg(\Big(\prod_{n=1}^{N}h(\textbf{x}_n)\Big)g(\bm{\eta})^N\exp\Big\{\bm{\eta}^T\sum_{n=1}^N\textbf{u}(\textbf{x}_n)\Big\}\bigg) =0
+\end{equation}
+By expanding \ref{eq:maximum_likelihood} it can be seen that 
+\begin{displaymath}
+\Big(\prod_{n=1}^{N}h(\textbf{x}_n)\Big)\Big(Ng(\bm{\eta})^{N-1}\nabla g(\bm{\eta})\exp\Big\{\bm{\eta}^T\sum_{n=1}^N\textbf{u}(\textbf{x}_n)\Big\}+g(\bm{\eta})^N \exp\{\bm{\eta}^T\sum_{n=1}^N\textbf{u}(\textbf{x}_n)\}\sum_{n=1}^N\textbf{u}(\textbf{x}_n)\Big)=0
+\end{displaymath}
+Therefore,
+\begin{equation}\label{eq:estimator}
+    -\nabla \ln{g(\bm{\eta}_{ML})} = \frac{1}{N}\sum_{n=1}^N\textbf{u}(\textbf{x}_n)
+\end{equation}
+From equation \ref{eq:estimator} it can be seen that $\bm{\eta}_{ML}$ can be determined if $\textbf{u}(\textbf{x}_n)$ is known, $\textbf{u}(\textbf{x}_n)$ is therefore called the $\emph{sufficient statistics}$. If $N\rightarrow \infty$, the right hand side of \ref{eq:estimator} would become $\mathbb{E}[\textbf{u}(\textbf{x})]$ and $\bm{\eta}_{ML}$ would be the true $\bm{\eta}$.
+\subsection{Conjugate Priors}
+Conjugate priors are priors that lead to their corresponding posterior distributions to have the same form as they do. 
+For exponential family distributions, their conjugate priors are of the form 
+\begin{equation}\label{eq:conjugate_prior}
+    p(\boldsymbol{\eta} | \boldsymbol{\chi}, \nu)=f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}
+\end{equation}
+$\nu$ can be interpreted as the number of samples that are observed. $\chi$ is the pseudo observation of the sufficient statistics $\textbf{u}(\textbf{x})$. Each one of the $\nu$ observations take the value of $\textbf{u}(\textbf{x})$.
+The updated posterior can be shown as
+\begin{equation}\label{eq:posterior}
+\begin{split}
+    p(\boldsymbol{\eta} | \mathbf{X}, \boldsymbol{\chi}, \nu) &=
+    \Big(\prod_{n=1}^{N}h(\textbf{x}_n)\Big)g(\bm{\eta})^N\exp\Big\{\bm{\eta}^T\sum_{n=1}^N\textbf{u}(\textbf{x}_n)\Big\}\times f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}\\
+    &\propto
+    g(\boldsymbol{\eta})^{\nu+N} \exp \left\{\boldsymbol{\eta}^{\mathrm{T}}\left(\sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \chi\right)\right\}
+\end{split}
+\end{equation}
+It can been seen from here that we can update the posterior with $\nu \leftarrow \nu+N$ and $\nu\chi \leftarrow \sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \chi$
+\subsubsection{Bernoulli Distribution}
+The conjugate prior for Bernoulli distribution is the Beta distribution. The probability density function for Beta distribution is 
+\begin{equation}\label{eq:beta}
+    p(x\mid a,b)=\frac{x^{a-1}(1-x)^{b-1}}{\mathbf{B}(a, b)}
+\end{equation}
+When it is written in the form of the conjugate prior
+\begin{equation}\label{eq:bernoulli}
+\begin{split}
+    \frac{\theta^{a-1}(1-\theta)^{b-1}}{\mathbf{B}(a, b)}
+    =\frac{1}{\mathbf{B}(a, b)}(1-\theta)^{a+b-2}\exp[(a+b-2)\ln(\frac{\theta}{1-\theta})\frac{a-1}{a+b-2}]
+\end{split}
+\end{equation}
+From equation \ref{eq:bernoulli} we can see that $\nu$ corresponds to $a+b-2$ here and $\bm{\chi}$ corresponds to $\frac{a-1}{a+b-2}$.
+\subsubsection{Normal Distribution}
+Given that the conjugate priors for exponential family distributions are of the form $p(\boldsymbol{\eta} | \boldsymbol{\chi}, \nu)=f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}$, we were trying to find the $\nu$ and $\chi$ for univariate Gaussian distribution given that the variance $\sigma^2$ is fixed.
 
+The probability density function of univariate Gaussian distribution is given by
+\begin{equation}\label{eq:gaussian}
+    p(x\mid\mu)=\frac{1}{\sqrt{2 \pi \sigma^{2}}} e^{-\frac{(x-\mu)^{2}}{2 \sigma^{2}}}
+\end{equation}
+First we can start by proving that the conjugate prior for Gaussian distribution is also a Gaussian distribution (when the variance is fixed).
+\begin{displaymath}
+\begin{array}{l}{p(x | \mu) \sim N\left(\mu, \sigma^{2}\right)} \\ {p(\mu) \sim N\left(\mu_{0}, \sigma_{0}^{2}\right)}\end{array}
+\end{displaymath}
+Suppose $D$ is the set of data points that we have observed. We have 
+\begin{equation}\label{eq:posterior}
+\begin{aligned} p(\mu | \mathcal{D}) &\propto  \prod_{i=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left\{-\frac{1}{2}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^{2}\right\} \times \frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\} \\ &\propto \exp \left\{-\frac{1}{2}\left[\sum_{i=1}^{N}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^{2}+\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right]\right\} \\ &\propto \exp \left\{-\frac{1}{2}\left[\left(\frac{N}{\sigma^{2}}+\frac{1}{\sigma_{0}^{2}}\right) \mu^{2}-2\left(\frac{\sum_{i=1}^{N} x^{(i)}}{\sigma^{2}}+\frac{\mu_{0}}{\sigma_{0}^{2}}\right) \mu\right]\right\} \end{aligned}
+\end{equation}
+We can see that equation \ref{eq:posterior} can be easily written in the form of a Gaussian distribution if we extract multiple from the coefficient in the front. 
+
+\textbf{\emph{Can all this be still written in the form of exponential family distribution and exponential family distribution's conjugate priors?}}
+
+We want to write equation
+\begin{displaymath}
+\prod_{i=1}^{N}\frac{1}{\sqrt{2\pi}\sigma}\exp\left\{\frac{1}{2}\Big(\frac{x^{(i)}-\mu}{\sigma}\Big)^2\right\}
+\end{displaymath} in the form of $p(\textbf{x}\mid\bm{\eta})=\Big(\prod_{n=1}^{N}h(\textbf{x}_n)\Big)g(\bm{\eta})^{N}\exp\Big\{\bm{\eta}^T\sum_{n=1}^{N}\textbf{u}(\textbf{x}_n)\Big\}$, and the prior
+$$\frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\}$$ in the form of $p(\boldsymbol{\eta} | \boldsymbol{\chi}, \nu)=f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}$.
+
+We can first start with priors.
+\begin{equation}\label{eq:deduction}
+\begin{split}
+    \frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\}&=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{-\frac{\mu^2-2{\mu}_0\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}
+\end{split}
+\end{equation}
+From the equation above we can deduce that the $\boldsymbol{\eta}$ should be $
+\begin{bmatrix}
+\mu\\
+\mu^2\\
+\end{bmatrix}$.
+\underline{Is this OK?}
+Continue with equation \ref{eq:deduction},
+\begin{displaymath}\label{eq:deduce}
+\begin{split}
+\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{-\frac{\mu^2-2{\mu}_0\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}&=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{\boldsymbol{\eta}^T\begin{bmatrix}
+\frac{\mu_0}{{\sigma_0}^2}\\
+-\frac{1}{2{\sigma_0}^2}\\
+\end{bmatrix}-\frac{{\mu_0}^2}{2{\sigma_0}^2}\right\}\\
+&=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{(\frac{-{\mu_0}^2}{2{\sigma_0}^2})\exp\Big[\boldsymbol{\eta}^T\begin{bmatrix}
+\frac{\mu_0}{{\sigma_0}^2}\\
+-\frac{1}{2{\sigma_0}^2}\\
+\end{bmatrix}\Big]}
+\end{split}
+\end{displaymath}
+We know from equation \ref{eq:deduce} that we need $\mu$ outside $\exp$ to construct $g(\boldsymbol{\eta})$.
+Therefore we have
+\begin{equation}
+\begin{split}
+    \frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{(\frac{-{\mu_0}^2}{2{\sigma_0}^2})\exp\Big[\boldsymbol{\eta}^T\begin{bmatrix}
+\frac{\mu_0}{{\sigma_0}^2}\\
+-\frac{1}{2{\sigma_0}^2}\\
+\end{bmatrix}\Big]}
+=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{[\frac{\alpha}{{\sigma_0}^2}{\mu}^2+\frac{\beta\mu_0}{{\sigma_0}^2}\mu]\left\{-\frac{(1+2\alpha)\mu^2-2{\mu_0}(1-\beta)\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}}
+\end{split}
+\end{equation}
+We can assume that $\nu$ here is the common denominator of $\frac{\alpha}{{\sigma_0}^2}$ and $\frac{\beta\mu_0}{{\sigma_0}^2}$, which is $\frac{1}{{\sigma_0}^2}$. Under this assumption $$g(\boldsymbol{\eta})=\exp(\alpha{\boldsymbol{\eta}}_2+\beta\mu_0{\boldsymbol{\eta}}_1)$$
+
+\underline{There's so far no way for us to determine what values $\alpha$ and $\beta$}.
 \newpage
 \section{Scoring Rules}
 Scoring rules is the simplest form of prediction mechanism. For every agent with some information, a scoring rule evaluates how close the information is from the actual outcome, and pays the agent in return for his/her information.
