@@ -2,13 +2,15 @@
 \usepackage[utf8]{inputenc}
 \usepackage{times}
 \usepackage{geometry,indentfirst}
-\usepackage{amsmath,amssymb,bm}
+\usepackage{amsmath,amssymb,bm,amsthm}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
 \geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
 
+\newtheorem{theorem}{Theorem}[section]
+
 \title{\textbf{Summary about Prediction Market}}
-\author{Zhihao Ruan, Jiayu Yi, Naihao Deng\\\texttt{\{ruanzh,yijiayu,dnaohao\}@umich.edu}}
+\author{Zhihao Ruan, Jiayu Yi, Naihao Deng\\\texttt{\{ruanzh,yijiayu,dnaihao\}@umich.edu}}
 
 \begin{document}
 \maketitle
@@ -27,7 +29,7 @@ Taking an event $\mathbf{X}$ with outcome space $\mathcal{X}$, we want to know s
 
 We've already known that sufficient statistic is a very suitable parameter to characterize a probability distribution. Therefore, we can use it to represent agent's belief. We just ask each agent for the sufficient statistic $\mathbf{u}(\mathbf{x})$ as a representation of his/her belief $p(\mathbf{x})$. Then we are able to measure how accurate the agent can predict with a scoring rule based on the actual outcome.
 
-Assume $\bm{\hat{\mu}}=\mathbb{E}_p[\mathbf{u}(\mathbf{x})]$ is the \textit{expected} sufficient statistic from agent's belief $p(\mathbf{x})$. Then, with the actual outcome denoted $\mathbf{x}$, the scoring rule takes the form:
+Assume $\bm{\mu}=\mathbb{E}_p[\mathbf{u}(\mathbf{x})]$ is the \textit{expected} sufficient statistic over some $p(\mathbf{x})$ that takes $\mathbf{u}(\mathbf{x})$ as its sufficient statistic and is taken as an estimate of the agent's belief. Assume $\bm{\hat{\mu}}$ is the agent's report as an estimate of $\bm{\mu}$. Then, with the actual outcome denoted $\mathbf{x}$, the scoring rule takes the form:
 \[S(\bm{\hat{\mu}},\mathbf{x}).\]
 We can see that the scoring rule is a measure of how close the agent's belief is from the actual outcome.
 
@@ -39,9 +41,30 @@ Assume that we already set the sufficient statistic to be $\mathbf{u}(\mathbf{x}
 Any scoring rule with this property actually encourages agents to report a probability distribution as close to the actual probability distribution of $\mathbf{X}$ as possible, which is in accordance with the essence of incentive compatibility.
 
 \subsection{Logarithmic Scoring Rule}
-Suppose that we have set a form of the sufficient statistic. A classic logarithmic scoring rule takes the form:
+Suppose that we have set a form of $\mathbf{u}(\mathbf{x})$. For some $p$ that takes $\mathbf{u}(\mathbf{x})$ as its sufficient statistic, a classic logarithmic scoring rule takes the form:
 \[S(\bm{\mu},\mathbf{x})=\ln p(\mathbf{x};\bm{\mu}),\]
-where $\bm{\mu}=\mathbb{E}_p[\mathbf{u}(\mathbf{x})]$ is the expected sufficient statistic over $p(\mathbf{x};\bm{\mu})$.
+where $\bm{\mu}=\mathbb{E}_p[\mathbf{u}(\mathbf{x})]$ is the expected sufficient statistic over $p(\mathbf{x};\bm{\mu})$. \textbf{For the following sections, we will be only talking about logarithmic scoring rules.}
+
+\subsection{Maximum Entropy Optimization}
+Now that we have the general expression of logarithmic scoring rules, how can we determine which $p(\mathbf{x};\bm{\mu})$ to choose as an estimate of agents' beliefs, given a specific $\mathbf{u}(\mathbf{x})$? 
+
+For some particular form of $\mathbf{u}(\mathbf{x})$, denote the set $\mathcal{P}$ which contains all $p$ that takes $\mathbf{u}(\mathbf{x})$ as its sufficient statistic. Then, we formulate the following optimization problem:
+\begin{align*}
+    \min_{p\in \mathcal{P}} &\quad F(p)=\int_{\mathbf{x}\in \mathcal{X}}p(\mathbf{x})\ln p(\mathbf{x})\ \mathrm{d}h(\mathbf{x})\\
+    \mathrm{s.t.} &\quad \mathbb{E}_p[\mathbf{u}(\mathbf{x})]=\bm{\mu}
+\end{align*}
+where $\bm{\mu}$ is the expected sufficient statistic over $p$, and $h(\mathbf{x})$ is the base measure.
+
+It is clear to see that $F(p)$ is actually the negative of entropy of $p(\mathbf{x})$. Therefore, minimizing $F(p)$ is thus maximizing the entropy of $p$. This actually mean that of all $p\in \mathcal{P}$, we tend to choose a $p$ that shows the most uncertainty of $\mathbf{X}$ as an estimate of agents' beliefs. This estimate is not necessarily exactly the same as agents' beliefs, as the general goal is just to find something that we can use to construct a metric in order to measure how close the agents' beliefs are from the actual outcome.
+
+It has been proved that $S(\bm{\mu},\mathbf{x})=\ln p(\mathbf{x};\bm{\mu})$ is \textbf{proper} if and only if $p$ is the exponential family. It has also been proved that the solutions to the optimization problem are exponential family distributions which takes the form 
+\begin{align*}
+    p(\mathbf{x};\bm{\eta})&=h(\mathbf{x})g(\bm{\eta})\exp\left\{ \bm{\eta}\cdot\mathbf{u}(\mathbf{x})\right\}\\
+    &=h(\mathbf{x})\exp\left\{ \bm{\eta}\cdot\mathbf{u}(\mathbf{x})-T(\bm{\eta})\right\}
+\end{align*}
+where $\bm{\eta}$ is the natural parameter of $p$, $T(\bm{\eta})=-\ln g(\bm{\eta})$ is the log-partition function of $p$.
+
+Either \textit{expected} sufficient statistic $\bm{\mu}$ or natural parameter $\bm{\eta}$ can parametrize a probability distribution $p$, and actually they are closely related. If we denote the convex conjugate of $T(\bm{\eta})$ as $G(\bm{\mu})$, then we have $\bm{\mu}=\nabla T(\bm{\eta}),\bm{\eta}=\nabla G(\bm{\mu})$.
 
 \newpage
 \section{Cost Function based Prediction Market with Bayesian Traders}
