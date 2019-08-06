@@ -257,7 +257,7 @@ Either \textit{expected} sufficient statistic $\bm{\mu}$ or natural parameter $\
 \section{Cost Function based Prediction Market with Bayesian Traders}
 Based on what we have in previous sections, we could simulate the prediction market by a Python program.
 
-For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{market-maker} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
+For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{trading-precedure} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
 
 \subsection{Bayesian Agents}\label{Bayesian-agents}
 Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
@@ -294,7 +294,7 @@ Based on the mathematical background above,
 The driving program takes agent number and max iteration number as hyper-parameters. The complete dataset is divided into two parts as random chosen data in the first part would be assigned to agents to form their priors, data in the second part would be fed to agents when they intend to enter the market.
 
 Each agent comes into the market iteratively with the total number of iteration not exceeding max iteration number in program arguments. The interval between each agent's arrival is subject to Poisson distribution.  % The Poisson distribution part might be dismissed since the data is not time serializable. 
-As discussed in Sec~\ref{Bayesian-agents} and Sec~\ref{market-maker}, each agent would update their belief and then trade with market maker. The final market price is considered as the aggregated belief among agents.
+As discussed in Sec~\ref{Bayesian-agents} and Sec~\ref{trading-precedure}, each agent would update their belief and then trade with market maker. The final market price is considered as the aggregated belief among agents.
 
 
 \end{document}
