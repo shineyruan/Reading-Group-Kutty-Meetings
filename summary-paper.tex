@@ -255,27 +255,40 @@ Either \textit{expected} sufficient statistic $\bm{\mu}$ or natural parameter $\
 \end{enumerate}
 
 \section{Cost Function based Prediction Market with Bayesian Traders}
-Based on what we have in previous sections, we could simulate the prediction market by python program.
+Based on what we have in previous sections, we could simulate the prediction market by a Python program.
 
 For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{market-maker} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
 
 \subsection{Bayesian Agents}\label{Bayesian-agents}
-Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\theta; b_0)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
-thus we have $b_0=\begin{bmatrix}n\nu \\n\end{bmatrix}$, in which $n$ would be the number of data points Bayesian agents have access to initially, $n\nu$ would be the sum of these data points.
+Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
+ in which $\nu$ would be the number of data points Bayesian agents have access to initially, $\nu\boldsymbol{\chi}$ would be the sum of these data points.
 
-Once the agent intends to enter the market, he would have access to several more data points before his entrance. He would update his belief by % equation in Helen's part 
-$b_1=\begin{bmatrix}n\nu+m\hat{\mu} \\n+m\end{bmatrix}$, that is, he would update the first entry of the vector as the sum of data he is now having access to, the second entry as the number of these data. He would also derive the amount of outstanding shares $\theta$ from the current market price, in our case, $\theta = -1/p$ ($p$ is the current market price).
+Suppose each agent would have observed $m$ data points before his or her entrance to the market. He would update his belief by % equation in Helen's part 
+$$\nu\leftarrow\nu+m$$ $$\nu\bm{\chi} \leftarrow \sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \bm{\chi}$$
+
+$\nu$ would be the number of data points that the agent observes before he enters the market. $\boldsymbol{\chi}$ is the average of the value of sufficient statistics of the observed data.
+
+Since we are using Bernoulli distribution, the $\mathbf{x}_n$ in question is just a scalar that can take the value of either 0 or 1. $\boldsymbol{\chi}$ would be the average of the observed 0s and 1s before the agent enters the market. The sufficient statistics for Bernoulli distribution is $x$. In other words,
+\begin{displaymath}
+\mathbf{u}(x) = x
+\end{displaymath}
+Since there is only one entry for the sufficient statistics, parameter $\boldsymbol{\eta}$ would be a scalar, which can be denoted as $\eta$. 
+The agent can also derive the amount of outstanding shares $\eta$ from the current market price $\xi$, in our case, 
+\begin{equation}
+    \xi(\eta) = \nabla_{\eta}\exp{(g(\eta))}=\nabla_{\eta}\ln \left(1+e^{\eta}\right)=\frac{e^{\eta}}{1+e^{\eta}}
+\end{equation}
 
 Based on % equation Helen's part.
-$$\nabla C(\theta+\delta)=\dfrac{n\nu+m\hat{\mu}}{n+m},$$ the agent would be able to decide $\delta$, the amount he would like to trade by
+$$\xi(\eta+\delta)=\frac{\nu x+\sum_{n=1}^{m}x_n}{\nu+m}$$ the agent would be able to decide $\delta$, the amount he would like to sell is
 $$
-    \delta=-\frac{1}{\frac{n\nu + m\hat{\mu}}{n + m}}-\theta.
+    \delta=\ln{\left( \frac{\nu x+\sum_{n=1}^{m}x_n}{\nu+m-(\nu x+\sum_{n=1}^{m}x_n)} \right)}-n
 $$
 
-\subsection{Market Maker}\label{market-maker}
-The market maker is initialized with the initial outstanding security amount $\theta$ and the initial market price, which are hyper-parameter predefined.
-
-The market maker holds the sufficient statistic $\phi(x) = x$, cost function for the market $C(\theta) = - \log (- \theta)$ and price function $p = - 1 / \theta$. He would keep track of number of trades, outstanding security amount and current market price when the market runs.
+\subsection{Trading Procedures}\label{trading-precedure}
+Based on the mathematical background above, 
+\begin{enumerate}
+    \item 
+\end{enumerate}
 
 \subsection{Executable Program}\label{main-executable}
 The driving program takes agent number and max iteration number as hyper-parameters. The complete dataset is divided into two parts as random chosen data in the first part would be assigned to agents to form their priors, data in the second part would be fed to agents when they intend to enter the market.
