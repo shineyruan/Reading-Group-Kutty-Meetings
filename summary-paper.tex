@@ -226,15 +226,15 @@ Either \textit{expected} sufficient statistic $\bm{\mu}$ or natural parameter $\
 \end{enumerate}
 
 \section{Cost Function based Prediction Market with Bayesian Traders}
-Based on what we have in previous sections, we could simulate the prediction market by python program.
+Based on what we have in previous sections, we could simulate the prediction market by a python program.
 
 For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{market-maker} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
 
 \subsection{Bayesian Agents}\label{Bayesian-agents}
-Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\theta; b_0)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
-thus we have $b_0=\begin{bmatrix}n\nu \\n\end{bmatrix}$, in which $n$ would be the number of data points Bayesian agents have access to initially, $n\nu$ would be the sum of these data points.
+Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
+ in which $\nu$ would be the number of data points Bayesian agents have access to initially, $\nu\boldsymbol{\chi}$ would be the sum of these data points.
 
-Once the agent intends to enter the market, he would have access to several more data points before his entrance. He would update his belief by % equation in Helen's part 
+Each agent would have observed several datapoints before his or her entrance. He would update his belief by % equation in Helen's part 
 $b_1=\begin{bmatrix}n\nu+m\hat{\mu} \\n+m\end{bmatrix}$, that is, he would update the first entry of the vector as the sum of data he is now having access to, the second entry as the number of these data. He would also derive the amount of outstanding shares $\theta$ from the current market price, in our case, $\theta = -1/p$ ($p$ is the current market price).
 
 Based on % equation Helen's part.
