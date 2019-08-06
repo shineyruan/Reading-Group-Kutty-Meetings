@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{times}
-\usepackage{geometry,indentfirst}
+\usepackage{geometry,indentfirst,soul}
 \usepackage{amsmath,amssymb,bm,amsthm}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
@@ -52,7 +52,7 @@ If we consider a set of independent identically distributed data denoted by $\ma
 \end{equation}
 To produce the maximum likelihood estimator $\bm{\eta}_{ML}$, we need to take the partial derivative of \ref{eq:likelihood} and set its value to 0.
 \begin{equation}\label{eq:maximum_likelihood}
-    \nabla \bigg(\left(\prod_{n=1}^{N}h(\mathbf{x}_n)\right)g(\bm{\eta})^N\exp\left\{\bm{\eta}^T\sum_{n=1}^N\mathbf{u}(\mathbf{x}_n)\right\}\bigg) =0
+    \nabla \left(\left(\prod_{n=1}^{N}h(\mathbf{x}_n)\right)g(\bm{\eta})^N\exp\left\{\bm{\eta}^T\sum_{n=1}^N\mathbf{u}(\mathbf{x}_n)\right\}\right) =0
 \end{equation}
 By expanding \ref{eq:maximum_likelihood} it can be seen that
 \begin{displaymath}
@@ -107,22 +107,22 @@ First we can start by proving that the conjugate prior for Gaussian distribution
 Suppose $D$ is the set of data points that we have observed. We have
 \begin{equation}\label{eq:posterior}
     \begin{aligned}
-        p(\mu | \mathcal{D}) & \propto  \prod_{i=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left\{-\frac{1}{2}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^{2}\right\} \times \frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\} \\ 
-        &\propto \exp\left\{-\frac{1}{2}\left[\sum_{i=1}^{N}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^{2}+\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right]\right\} \\ 
-        &\propto \exp \left\{-\frac{1}{2}\left[\left(\frac{N}{\sigma^{2}}+\frac{1}{\sigma_{0}^{2}}\right) \mu^{2}-2\left(\frac{\sum_{i=1}^{N} x^{(i)}}{\sigma^{2}}+\frac{\mu_{0}}{\sigma_{0}^{2}}\right) \mu\right]\right\}
+        p(\mu | \mathcal{D}) & \propto  \prod_{i=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left\{-\frac{1}{2}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^{2}\right\} \times \frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\} \\
+                             & \propto \exp\left\{-\frac{1}{2}\left[\sum_{i=1}^{N}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^{2}+\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right]\right\}                                                                                               \\
+                             & \propto \exp \left\{-\frac{1}{2}\left[\left(\frac{N}{\sigma^{2}}+\frac{1}{\sigma_{0}^{2}}\right) \mu^{2}-2\left(\frac{\sum_{i=1}^{N} x^{(i)}}{\sigma^{2}}+\frac{\mu_{0}}{\sigma_{0}^{2}}\right) \mu\right]\right\}
     \end{aligned}
 \end{equation}
 We can see that equation \ref{eq:posterior} can be easily written in the form of a Gaussian distribution if we extract multiple from the coefficient in the front.
 
-\textbf{\emph{Can all this be still written in the form of exponential family distribution and exponential family distribution's conjugate priors?}}
+\ul{Can all this be still written in the form of exponential family distribution and exponential family distribution's conjugate priors?}
 
-We want to write equation
+We want to write the prior
+$$\frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\}$$ in the form of $p(\boldsymbol{\eta} | \boldsymbol{\chi}, \nu)=f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}$, and the posterior 
 \begin{displaymath}
-    \prod_{i=1}^{N}\frac{1}{\sqrt{2\pi}\sigma}\exp\left\{\frac{1}{2}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^2\right\}
-\end{displaymath} in the form of $p(\mathbf{x}|\bm{\eta})=\left(\prod_{n=1}^{N}h(\mathbf{x}_n)\right)g(\bm{\eta})^{N}\exp\left\{\bm{\eta}^T\sum_{n=1}^{N}\mathbf{u}(\mathbf{x}_n)\right\}$, and the prior
-$$\frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\}$$ in the form of $p(\boldsymbol{\eta} | \boldsymbol{\chi}, \nu)=f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}$.
+\prod_{i=1}^{N}\frac{1}{\sqrt{2\pi}\sigma}\exp\left\{-\frac{1}{2}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^2\right\}
+\end{displaymath} in the form of $p(\mathbf{x}|\bm{\eta})=\left(\prod_{n=1}^{N}h(\mathbf{x}_n)\right)g(\bm{\eta})^{N}\exp\left\{\bm{\eta}^T\sum_{n=1}^{N}\mathbf{u}(\mathbf{x}_n)\right\}$.
 
-We can first start with priors.
+\textbf{We can first start with priors.}
 \begin{equation}\label{eq:deduction}
     \begin{split}
         \frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\}&=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{-\frac{\mu^2-2{\mu}_0\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}
@@ -134,33 +134,38 @@ From the equation above we can deduce that the $\boldsymbol{\eta}$ should be $
         \mu^2 \\
     \end{bmatrix}$.
 \underline{Is this OK?}
-Continue with equation \ref{eq:deduction},
-\begin{displaymath}\label{eq:deduce}
+Continue with Eq. \ref{eq:deduction},
+\begin{equation}\label{eq:deduce}
     \begin{split}
         \frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{-\frac{\mu^2-2{\mu}_0\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}&=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{\boldsymbol{\eta}^T\begin{bmatrix}
             \frac{\mu_0}{{\sigma_0}^2} \\
             -\frac{1}{2{\sigma_0}^2}   \\
         \end{bmatrix}-\frac{{\mu_0}^2}{2{\sigma_0}^2}\right\}\\
         &=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{\left(\frac{-{\mu_0}^2}{2{\sigma_0}^2}\right)}\exp{\left[\boldsymbol{\eta}^T\begin{bmatrix}
-                \frac{\mu_0}{{\sigma_0}^2} \\
-                -\frac{1}{2{\sigma_0}^2}   \\
-            \end{bmatrix}\right] }
+                    \frac{\mu_0}{{\sigma_0}^2} \\
+                    -\frac{1}{2{\sigma_0}^2}   \\
+                \end{bmatrix}\right] }
     \end{split}
-\end{displaymath}
+\end{equation}
 We know from equation \ref{eq:deduce} that we need $\mu$ outside $\exp$ to construct $g(\boldsymbol{\eta})$.
-Therefore we have
+
+If we create two helper parameters $\alpha,\beta$ to help us split the coefficients of $\mu$ and $\mu^2$, we'll have
 \begin{equation}
     \begin{split}
         \frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{\left(\frac{-{\mu_0}^2}{2{\sigma_0}^2}\right)}\exp{\left[\boldsymbol{\eta}^T\begin{bmatrix}
-                \frac{\mu_0}{{\sigma_0}^2} \\
-                -\frac{1}{2{\sigma_0}^2}   \\
-            \end{bmatrix}\right]}
+                    \frac{\mu_0}{{\sigma_0}^2} \\
+                    -\frac{1}{2{\sigma_0}^2}   \\
+                \end{bmatrix}\right]}
         =\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{\left[\frac{\alpha}{{\sigma_0}^2}{\mu}^2+\frac{\beta\mu_0}{{\sigma_0}^2}\mu\right]\left\{-\frac{(1+2\alpha)\mu^2-2{\mu_0}(1-\beta)\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}}
     \end{split}
 \end{equation}
-We can assume that $\nu$ here is the common denominator of $\frac{\alpha}{{\sigma_0}^2}$ and $\frac{\beta\mu_0}{{\sigma_0}^2}$, which is $\frac{1}{{\sigma_0}^2}$. Under this assumption $$g(\boldsymbol{\eta})=\exp(\alpha{\boldsymbol{\eta}}_2+\beta\mu_0{\boldsymbol{\eta}}_1)$$
+We can assume that $\nu$ here is the common denominator of $\frac{\alpha}{{\sigma_0}^2}$ and $\frac{\beta\mu_0}{{\sigma_0}^2}$, which is $\frac{1}{{\sigma_0}^2}$. Under this assumption $$g(\boldsymbol{\eta})=\exp(\alpha{\boldsymbol{\eta}}_2+\beta\mu_0{\boldsymbol{\eta}}_1).$$
+\ul{Unfortunately, there's so far no way for us to determine the values of $\alpha$ and $\beta$.}
 
-\underline{There's so far no way for us to determine what values $\alpha$ and $\beta$}.
+\textbf{When it comes to the posterior}, we first have to tidy up the original expression and get
+\[\prod_{i=1}^N\frac{1}{\sqrt{2\pi}\sigma}\exp\left\{ -\frac{1}{2}\left( \frac{x^{(i)}-\mu}{\sigma} \right)^2\right\}=\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N\exp\left\{ -\frac{1}{2\sigma^2}\left[ \sum_{i=1}^N\left( x^{(i)} \right)^2-2\mu\sum_{i=1}^N x^{(i)}+N\mu^2 \right]\right\}.\]
+
+
 \newpage
 \section{Scoring Rules}
 Scoring rules is the simplest form of prediction mechanism. For every agent with some information, a scoring rule evaluates how close the information is from the actual outcome, and pays the agent in return for his/her information.
@@ -209,14 +214,21 @@ Either \textit{expected} sufficient statistic $\bm{\mu}$ or natural parameter $\
 \subsubsection{Examples}
 \begin{enumerate}
     \item If we take the outcome space $\mathcal{X}=[0,+\infty)$ and $u(x)=x$, the maximum entropy optimization produces an exponential distribution. Hence, the log scoring rule becomes
-    \[S(\mu,x)=-\frac{x}{\mu}-\ln\mu.\]
+          \[S(\mu,x)=-\frac{x}{\mu}-\ln\mu.\]
+
+          If we take the partial derivative with respect to $\mu$
+          \[\frac{\partial S}{\partial\mu}=\frac{x}{\mu^2}-\frac{1}{\mu}=\frac{x-\mu}{\mu^2},\]
+          we can see that the scoring rule reaches maximum when $\mu=x$. This actually means that agents should report information as close to the actual outcome as possible in order to maximize profit, which corresponds to the essence of incentive compatibility.
+    \item If we take the outcome space $\mathcal{X}=\mathbb{R}$ and $\mathbf{u}(x)=(x,x^2)$, the maximum entropy optimization produces a Gaussian distribution. Hence, the log scoring rule becomes
+          \[S((\mu,\sigma^2),x)=-\frac{(x-\mu)^2}{\sigma^2}-\ln\sigma^2.\]
+
+          As this scoring rule is a basic parabola with respect to $\mu$, it is also clear that it reaches the maximum when $\mu=x$. Similarly, this scoring rule is also incentive compatible.
 \end{enumerate}
 
-\newpage
 \section{Cost Function based Prediction Market with Bayesian Traders}
 Based on what we have in previous sections, we could simulate the prediction market by python program.
 
-For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{market-maker} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution. 
+For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{market-maker} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
 
 \subsection{Bayesian Agents}\label{Bayesian-agents}
 Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\theta; b_0)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
@@ -226,9 +238,9 @@ Once the agent intends to enter the market, he would have access to several more
 $b_1=\begin{bmatrix}n\nu+m\hat{\mu} \\n+m\end{bmatrix}$, that is, he would update the first entry of the vector as the sum of data he is now having access to, the second entry as the number of these data. He would also derive the amount of outstanding shares $\theta$ from the current market price, in our case, $\theta = -1/p$ ($p$ is the current market price).
 
 Based on % equation Helen's part.
-$$\nabla C(\theta+\delta)=\dfrac{n\nu+m\hat{\mu}}{n+m},$$ the agent would be able to decide $\delta$, the amount he would like to trade by 
+$$\nabla C(\theta+\delta)=\dfrac{n\nu+m\hat{\mu}}{n+m},$$ the agent would be able to decide $\delta$, the amount he would like to trade by
 $$
-\delta=-\frac{1}{\frac{n\nu + m\hat{\mu}}{n + m}}-\theta.
+    \delta=-\frac{1}{\frac{n\nu + m\hat{\mu}}{n + m}}-\theta.
 $$
 
 \subsection{Market Maker}\label{market-maker}
