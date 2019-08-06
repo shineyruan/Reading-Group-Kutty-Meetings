@@ -234,13 +234,25 @@ For the setup, there would be a group of Bayesian agents (the number of agents a
 Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
  in which $\nu$ would be the number of data points Bayesian agents have access to initially, $\nu\boldsymbol{\chi}$ would be the sum of these data points.
 
-Suppose each agent would have observed $m$ datapoints before his or her entrance to the market. He would update his belief by % equation in Helen's part 
-$$\nu\leftarrow\nu+m$$, that is, he would update the first entry of the vector as the sum of data he is now having access to, the second entry as the number of these data. He would also derive the amount of outstanding shares $\theta$ from the current market price, in our case, $\theta = -1/p$ ($p$ is the current market price).
+Suppose each agent would have observed $m$ data points before his or her entrance to the market. He would update his belief by % equation in Helen's part 
+$$\nu\leftarrow\nu+m$$ $$\nu\bm{\chi} \leftarrow \sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \bm{\chi}$$
+
+$\nu$ would be the number of data points that the agent observes before he enters the market. $\boldsymbol{\chi}$ is the average of the value of sufficient statistics of the observed data.
+
+Since we are using Bernoulli distribution, the $\mathbf{x}_n$ in question is just a scalar that can take the value of either 0 or 1. $\boldsymbol{\chi}$ would be the average of the observed 0s and 1s before the agent enters the market. The sufficient statistics for Bernoulli distribution is $x$. In other words,
+\begin{displaymath}
+\mathbf{u}(x) = x
+\end{displaymath}
+Since there is only one entry for the sufficient statistics, parameter $\boldsymbol{\eta}$ would be a scalar, which can be denoted as $\eta$. 
+The agent can also derive the amount of outstanding shares $\eta$ from the current market price $\xi$, in our case, 
+\begin{equation}
+    \xi(\eta) = \nabla_{\eta}\exp{(g(\eta))}=\nabla_{\eta}\ln \left(1+e^{\eta}\right)=\frac{e^{\eta}}{1+e^{\eta}}
+\end{equation}
 
 Based on % equation Helen's part.
-$$\nabla C(\theta+\delta)=\dfrac{n\nu+m\hat{\mu}}{n+m},$$ the agent would be able to decide $\delta$, the amount he would like to trade by
+$$\xi(\eta+\delta)=\frac{\nu x+\sum_{n=1}^{m}x_n}{\nu+m}$$ the agent would be able to decide $\delta$, the amount he would like to sell is
 $$
-    \delta=-\frac{1}{\frac{n\nu + m\hat{\mu}}{n + m}}-\theta.
+    \delta=\ln{(\frac{\nu x+\sum_{n=1}^{m}x_n}{\nu+m-(\nu x+\sum_{n=1}^{m}x_n)})}-n
 $$
 
 \subsection{Market Maker}\label{market-maker}
