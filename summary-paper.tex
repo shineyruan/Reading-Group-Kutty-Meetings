@@ -234,8 +234,8 @@ For the setup, there would be a group of Bayesian agents (the number of agents a
 Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
  in which $\nu$ would be the number of data points Bayesian agents have access to initially, $\nu\boldsymbol{\chi}$ would be the sum of these data points.
 
-Each agent would have observed several datapoints before his or her entrance. He would update his belief by % equation in Helen's part 
-$b_1=\begin{bmatrix}n\nu+m\hat{\mu} \\n+m\end{bmatrix}$, that is, he would update the first entry of the vector as the sum of data he is now having access to, the second entry as the number of these data. He would also derive the amount of outstanding shares $\theta$ from the current market price, in our case, $\theta = -1/p$ ($p$ is the current market price).
+Suppose each agent would have observed $m$ datapoints before his or her entrance to the market. He would update his belief by % equation in Helen's part 
+$$\nu\leftarrow\nu+m$$, that is, he would update the first entry of the vector as the sum of data he is now having access to, the second entry as the number of these data. He would also derive the amount of outstanding shares $\theta$ from the current market price, in our case, $\theta = -1/p$ ($p$ is the current market price).
 
 Based on % equation Helen's part.
 $$\nabla C(\theta+\delta)=\dfrac{n\nu+m\hat{\mu}}{n+m},$$ the agent would be able to decide $\delta$, the amount he would like to trade by
