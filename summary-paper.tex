@@ -257,7 +257,7 @@ Either \textit{expected} sufficient statistic $\bm{\mu}$ or natural parameter $\
 \section{Cost Function based Prediction Market with Bayesian Traders}
 Based on what we have in previous sections, we could simulate the prediction market by a Python program.
 
-For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{trading-precedure} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
+For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{trading-procedure} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
 
 \subsection{Bayesian Agents}\label{Bayesian-agents}
 Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
@@ -280,18 +280,33 @@ $$\xi(\eta+\delta)=\frac{n m \chi+\sum_{n=1}^{m}x_n}{n m+m}$$ the agent would be
 \begin{equation}
     \delta=\ln{(\frac{n m \chi+\sum_{i=1}^{m}x_i}{n m+m-(n m \chi+\sum_{i=1}^{m}x_i)})}-\eta
 \end{equation}
+\subsection{Trading Procedures}\label{trading-procedure}
+Based on the mathematical background above, we can derive a general trading procedure for the prediction market with Bayesian agents.
+\subsubsection{Assumptions and hyperparameters} 
+For simplification, we assume that each agent has access to their own private set of data points of size $m$, which means that the number of data points that each agents observed is constant.
 
-% \subsection{Market Maker}\label{market-maker}
-% The market maker is initialized with the initial outstanding security amount $\theta$ and the initial market price, which are hyper-parameter predefined.
-
-% The market maker holds the sufficient statistic $\phi(x) = x$, cost function for the market $C(\theta) = - \log (- \theta)$ and price function $p = - 1 / \theta$. He would keep track of number of trades, outstanding security amount and current market price when the market runs.
+Throughout the entire trading process, the market maker will always post the current market price $\mu$ and the number of trades $n$.
+\subsubsection{Procedures}
+\begin{enumerate}
+    \item The market maker sets an initial market price $\chi=\chi_0$, and sets the number of trades $\nu=0$.
+    \item An agent comes into the market, before which he has observed $m$ data points $\left\{ x_1,\ldots,x_m\right\}$ in private.
+    \item He calculates 
+    \[\hat{\mu}=\frac{1}{m}\sum_{i=1}^m \mathbf{u}(x_i)=\frac{1}{m}\sum_{i=1}^m x_i\]
+    as his own prior belief.
+    \item He sees the current market price $\chi$ and the number of trades $\nu$. He then knows that $\nu$ agents have traded in the market before him. Under the assumption that all agents observe the same number of data points, the total number of initial pseudo observations would be $\nu m$ with an average of $\chi$.
+    \item He updates his prior belief and obtains his posterior by 
+    \[\mu'=\frac{\nu m\chi+m\hat{\mu}}{\nu m+m}.\]
+    \item He trades some shares in the market in order to change the current market price to $\mu'$.
+    \item The current market price is thus changed to 
+    \[\chi\leftarrow\frac{\nu m\chi+m\hat{\mu}}{\nu m+m},\qquad \nu\leftarrow\nu+1.\]
+\end{enumerate}
 
 
 \subsection{Executable Program}\label{main-executable}
 The driving program takes agent number and max iteration number as hyper-parameters. The complete dataset is divided into two parts as random chosen data in the first part would be assigned to agents to form their priors, data in the second part would be fed to agents when they intend to enter the market.
 
 Each agent comes into the market iteratively with the total number of iteration not exceeding max iteration number in program arguments. The interval between each agent's arrival is subject to Poisson distribution.  % The Poisson distribution part might be dismissed since the data is not time serializable. 
-As discussed in Sec~\ref{Bayesian-agents} and Sec~\ref{trading-precedure}, each agent would update their belief and then trade with market maker. The final market price is considered as the aggregated belief among agents.
+As discussed in Sec~\ref{Bayesian-agents} and Sec~\ref{trading-procedure}, each agent would update their belief and then trade with market maker. The final market price is considered as the aggregated belief among agents.
 
 
 \end{document}
