@@ -257,13 +257,13 @@ Either \textit{expected} sufficient statistic $\bm{\mu}$ or natural parameter $\
 \section{Cost Function based Prediction Market with Bayesian Traders}
 Based on what we have in previous sections, we could simulate the prediction market by a Python program.
 
-For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{trading-procedure} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
+For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents} and Sec~\ref{trading-procedure}. The dataset the market is based on is subject to Bernoulli distribution.
 
 \subsection{Bayesian Agents}\label{Bayesian-agents}
 Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
  in which $n$ would be the number of trades the market maker publishes, $\boldsymbol{\chi}$ would be the current market price.
 
-Suppose each agent would have observed $m$ data points before his or her entrance to the market. Since he knows that each agent would have access to $m$ data points, $$\nu=nm$$ He would update his belief by % equation in Helen's part 
+Suppose each agent would have observed $m$ data points before his or her entrance to the market. Since he knows that each agent would have access to $m$ data points, we thus have $$\nu=nm.$$ He would update his belief by % equation in Helen's part 
 $$nm \leftarrow n m+m$$ $$\nu\bm{\chi} \leftarrow \sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \bm{\chi}$$
 
 Since we are using Bernoulli distribution, the $\mathbf{x}_n$ in question is just a scalar that can take the value of either 0 or 1. The sufficient statistics for Bernoulli distribution is $x$. In other words,
@@ -278,7 +278,7 @@ The agent can also derive the amount of outstanding shares $\eta$ from the curre
 Based on % equation Helen's part.
 $$\xi(\eta+\delta)=\frac{n m \chi+\sum_{n=1}^{m}x_n}{n m+m}$$ the agent would be able to decide $\delta$, the amount he would like to sell is
 \begin{equation}
-    \delta=\ln{(\frac{n m \chi+\sum_{i=1}^{m}x_i}{n m+m-(n m \chi+\sum_{i=1}^{m}x_i)})}-\eta
+    \delta=\ln{\left( \frac{n m \chi+\sum_{i=1}^{m}x_i}{n m+m-(n m \chi+\sum_{i=1}^{m}x_i)} \right)}-\eta
 \end{equation}
 \subsection{Trading Procedures}\label{trading-procedure}
 Based on the mathematical background above, we can derive a general trading procedure for the prediction market with Bayesian agents.
@@ -288,25 +288,18 @@ For simplification, we assume that each agent has access to their own private se
 Throughout the entire trading process, the market maker will always post the current market price $\mu$ and the number of trades $n$.
 \subsubsection{Procedures}
 \begin{enumerate}
-    \item The market maker sets an initial market price $\chi=\chi_0$, and sets the number of trades $\nu=0$.
+    \item The market maker sets an initial market price $\chi=\chi_0$, and sets the number of trades $n=0$.
     \item An agent comes into the market, before which he has observed $m$ data points $\left\{ x_1,\ldots,x_m\right\}$ in private.
     \item He calculates 
     \[\hat{\mu}=\frac{1}{m}\sum_{i=1}^m \mathbf{u}(x_i)=\frac{1}{m}\sum_{i=1}^m x_i\]
     as his own prior belief.
-    \item He sees the current market price $\chi$ and the number of trades $\nu$. He then knows that $\nu$ agents have traded in the market before him. Under the assumption that all agents observe the same number of data points, the total number of initial pseudo observations would be $\nu m$ with an average of $\chi$.
+    \item He sees the current market price $\chi$ and the number of trades $n$. He then knows that $n$ agents have traded in the market before him. Under the assumption that all agents observe the same number of data points, the total number of initial pseudo observations would be $nm$ with an average of $\chi$.
     \item He updates his prior belief and obtains his posterior by 
-    \[\mu'=\frac{\nu m\chi+m\hat{\mu}}{\nu m+m}.\]
+    \[\mu'=\frac{nm\chi+m\hat{\mu}}{nm+m}.\]
     \item He trades some shares in the market in order to change the current market price to $\mu'$.
     \item The current market price is thus changed to 
-    \[\chi\leftarrow\frac{\nu m\chi+m\hat{\mu}}{\nu m+m},\qquad \nu\leftarrow\nu+1.\]
+    \[\chi\leftarrow\frac{nm\chi+m\hat{\mu}}{nm+m},\qquad n\leftarrow n+1.\]
 \end{enumerate}
-
-
-\subsection{Executable Program}\label{main-executable}
-The driving program takes agent number and max iteration number as hyper-parameters. The complete dataset is divided into two parts as random chosen data in the first part would be assigned to agents to form their priors, data in the second part would be fed to agents when they intend to enter the market.
-
-Each agent comes into the market iteratively with the total number of iteration not exceeding max iteration number in program arguments. The interval between each agent's arrival is subject to Poisson distribution.  % The Poisson distribution part might be dismissed since the data is not time serializable. 
-As discussed in Sec~\ref{Bayesian-agents} and Sec~\ref{trading-procedure}, each agent would update their belief and then trade with market maker. The final market price is considered as the aggregated belief among agents.
 
 
 \end{document}
