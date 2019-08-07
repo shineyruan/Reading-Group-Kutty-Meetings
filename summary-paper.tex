@@ -261,10 +261,10 @@ For the setup, there would be a group of Bayesian agents (the number of agents a
 
 \subsection{Bayesian Agents}\label{Bayesian-agents}
 Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
- in which $\nu$ would be the number of trades the market maker publishes, $\boldsymbol{\chi}$ would be the current market price.
+ in which $n$ would be the number of trades the market maker publishes, $\boldsymbol{\chi}$ would be the current market price.
 
-Suppose each agent would have observed $m$ data points before his or her entrance to the market. He would update his belief by % equation in Helen's part 
-$$\nu\leftarrow\nu+m$$ $$\nu\bm{\chi} \leftarrow \sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \bm{\chi}$$
+Suppose each agent would have observed $m$ data points before his or her entrance to the market. Since he knows that each agent would have access to $m$ data points, $$\nu=nm$$ He would update his belief by % equation in Helen's part 
+$$nm \leftarrow n m+m$$ $$\nu\bm{\chi} \leftarrow \sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \bm{\chi}$$
 
 Since we are using Bernoulli distribution, the $\mathbf{x}_n$ in question is just a scalar that can take the value of either 0 or 1. The sufficient statistics for Bernoulli distribution is $x$. In other words,
 \begin{displaymath}
@@ -276,11 +276,10 @@ The agent can also derive the amount of outstanding shares $\eta$ from the curre
     \xi(\eta) = \nabla_{\eta}\exp{(g(\eta))}=\nabla_{\eta}\ln \left(1+e^{\eta}\right)=\frac{e^{\eta}}{1+e^{\eta}}
 \end{equation}
 Based on % equation Helen's part.
-$$\xi(\eta+\delta)=\frac{\nu m \chi+\sum_{n=1}^{m}x_n}{\nu m+m}$$ the agent would be able to decide $\delta$, the amount he would like to sell is
-$$
-
-    \delta=\ln{(\frac{\nu m \chi+\sum_{n=1}^{m}x_n}{\nu m+m-(\nu m \chi+\sum_{n=1}^{m}x_n)})}-\eta
-$$
+$$\xi(\eta+\delta)=\frac{n m \chi+\sum_{n=1}^{m}x_n}{n m+m}$$ the agent would be able to decide $\delta$, the amount he would like to sell is
+\begin{equation}
+    \delta=\ln{(\frac{n m \chi+\sum_{i=1}^{m}x_i}{n m+m-(n m \chi+\sum_{i=1}^{m}x_i)})}-\eta
+\end{equation}
 
 % \subsection{Market Maker}\label{market-maker}
 % The market maker is initialized with the initial outstanding security amount $\theta$ and the initial market price, which are hyper-parameter predefined.
