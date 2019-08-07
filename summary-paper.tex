@@ -62,14 +62,14 @@ Therefore,
 \begin{equation}\label{eq:estimator}
     -\nabla \ln{g(\bm{\eta}_{ML})} = \frac{1}{N}\sum_{n=1}^N\mathbf{u}(\mathbf{x}_n)
 \end{equation}
-From equation \ref{eq:estimator} it can be seen that $\bm{\eta}_{ML}$ can be determined if $\mathbf{u}(\mathbf{x}_n)$ is known, $\mathbf{u}(\mathbf{x}_n)$ is therefore called the $\emph{sufficient statistics}$. If $N\rightarrow \infty$, the right hand side of \ref{eq:estimator} would become $\mathbb{E}[\mathbf{u}(\mathbf{x})]$ and $\bm{\eta}_{ML}$ would be the true $\bm{\eta}$.
+From equation \ref{eq:estimator} it can be seen that $\bm{\eta}_{ML}$ can be determined if $\mathbf{u}(\mathbf{x}_n)$ is known, $\mathbf{u}(\mathbf{x}_n)$ is therefore called the \textbf{sufficient statistics}. If $N\rightarrow \infty$, the right hand side of \ref{eq:estimator} would become $\mathbb{E}[\mathbf{u}(\mathbf{x})]$ and $\bm{\eta}_{ML}$ would be the true $\bm{\eta}$.
 \subsection{Conjugate Priors}
 Conjugate priors are priors that lead to their corresponding posterior distributions to have the same form as they do.
 For exponential family distributions, their conjugate priors are of the form
 \begin{equation}\label{eq:conjugate_prior}
     p(\boldsymbol{\eta} | \boldsymbol{\chi}, \nu)=f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}
 \end{equation}
-$\nu$ can be interpreted as the number of samples that are observed. $\chi$ is the pseudo observation of the sufficient statistics $\mathbf{u}(\mathbf{x})$. Each one of the $\nu$ observations take the value of $\mathbf{u}(\mathbf{x})$.
+$\nu$ can be interpreted as the number of samples that are observed. $\bm{\chi}$ is the mean of the pseudo observation of the sufficient statistics $\mathbf{u}(\mathbf{x})$. Each one of the $\nu$ observations take the value of $\bm{\chi}$.
 The updated posterior can be shown as
 \begin{equation}\label{eq:posterior_0}
     \begin{split}
@@ -79,7 +79,7 @@ The updated posterior can be shown as
         g(\boldsymbol{\eta})^{\nu+N} \exp \left\{\boldsymbol{\eta}^{\mathrm{T}}\left(\sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \bm{\chi}\right)\right\}
     \end{split}
 \end{equation}
-It can been seen from here that we can update the posterior with $\nu \leftarrow \nu+N$ and $\nu\bm{\chi} \leftarrow \sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \bm{\chi}$
+It can been seen from here that we can update the posterior with $\nu \leftarrow \nu+N$ and $\nu\bm{\chi} \leftarrow \sum_{n=1}^{N} \mathbf{u}\left(\mathbf{x}_{n}\right)+\nu \bm{\chi}$. \textbf{This update rule again emphasizes that $\nu$ is the number of pseudo observations, and $\bm{\chi}$ is the mean of the sufficient statistics $\mathbf{u}(\mathbf{x})$ of the pseudo observations.}
 \subsubsection{Bernoulli Distribution}
 The conjugate prior for Bernoulli distribution is the Beta distribution. The probability density function for Beta distribution is
 \begin{equation}\label{eq:beta}
@@ -163,8 +163,37 @@ We can assume that $\nu$ here is the common denominator of $\frac{\alpha}{{\sigm
 \ul{Unfortunately, there's so far no way for us to determine the values of $\alpha$ and $\beta$.}
 
 \textbf{When it comes to the posterior}, we first have to tidy up the original expression and get
-\[\prod_{i=1}^N\frac{1}{\sqrt{2\pi}\sigma}\exp\left\{ -\frac{1}{2}\left( \frac{x^{(i)}-\mu}{\sigma} \right)^2\right\}=\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N\exp\left\{ -\frac{1}{2\sigma^2}\left[ \sum_{i=1}^N\left( x^{(i)} \right)^2-2\mu\sum_{i=1}^N x^{(i)}+N\mu^2 \right]\right\}.\]
+\begin{align*}
+    \prod_{i=1}^N\frac{1}{\sqrt{2\pi}\sigma}\exp\left\{ -\frac{1}{2}\left( \frac{x^{(i)}-\mu}{\sigma} \right)^2\right\}&=\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N\exp\left\{ -\frac{1}{2\sigma^2}\left[ \sum_{i=1}^N\left( x^{(i)} \right)^2-2\mu\sum_{i=1}^N x^{(i)}+N\mu^2 \right]\right\}\\
+    &=\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N\exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^N\left( x^{(i)} \right)^2\right\}\exp\left\{ \frac{\mu}{\sigma^2}\sum_{i=1}^N x^{(i)}-\frac{N}{2\sigma^2}\mu^2\right\}
+\end{align*}
+Recall our goal: $p(\mathbf{x}|\bm{\eta})=\left(\prod_{n=1}^{N}h(\mathbf{x}_n)\right)g(\bm{\eta})^{N}\exp\left\{\bm{\eta}^T\sum_{n=1}^{N}\mathbf{u}(\mathbf{x}_n)\right\}$, since from prior $\bm{\eta}=\begin{bmatrix}
+    \mu\\\mu^2
+\end{bmatrix}$, we have to separate a term that contains $N,\mu,\mu^2$ for $g(\bm{\eta})^N$. Again we wish to create some helper parameters $\alpha'$ and $\beta'$ such that the expression becomes
+\begin{align*}
+    \left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N&\exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^N\left( x^{(i)} \right)^2\right\}\exp\left\{ \alpha'N\mu\sum_{i=1}^N x^{(i)}+\beta'N\mu^2 \right\}\\
+    &\exp\left\{ \left( \frac{\mu}{\sigma^2}\sum_{i=1}^N x^{(i)}-\alpha'N\mu\sum_{i=1}^N x^{(i)} \right)-\left( \beta'N\mu^2+\frac{N}{2\sigma^2}\mu^2 \right)\right\}\\
+    =\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N&\exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^N\left( x^{(i)} \right)^2\right\}\cdot\left( \alpha'\mu\sum_{i=1}^N x^{(i)}+\beta'\mu^2 \right)^N\\
+    &\exp\left\{ \mu\left( \frac{1}{\sigma^2}\sum_{i=1}^N x^{(i)}-\alpha'N\sum_{i=1}^N x^{(i)} \right)-\mu^2\left( \beta'N+\frac{N}{2\sigma^2} \right)\right\}.
+\end{align*}
 
+With one-to-one correspondence with the goal and we can find that 
+\begin{align*}
+    \prod_{n=1}^N h(\mathbf{x_n})&=\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N\exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^N\left( x^{(i)} \right)^2\right\}\\
+    g\left( \begin{bmatrix}
+        \mu\\~\\\mu^2
+    \end{bmatrix} \right)&=\begin{bmatrix}
+        \mu\\~\\\mu^2
+    \end{bmatrix}\cdot\begin{bmatrix}
+        \alpha'\sum_{i=1}^N x^{(i)}\\~\\\beta'
+    \end{bmatrix}\\
+    \sum_{n=1}^N\mathbf{u}(\mathbf{x_n})&=\begin{bmatrix}
+        \left( \frac{1}{\sigma^2}-\alpha'N \right)\sum_{i=1}^N x^{(i)}\\
+        ~\\
+        \beta'N+\frac{N}{2\sigma^2}
+    \end{bmatrix}.
+\end{align*}
+\ul{However there is still no way to detemine the exact values of $\alpha'$ and $\beta'$.}
 
 \newpage
 \section{Scoring Rules}
@@ -226,9 +255,9 @@ Either \textit{expected} sufficient statistic $\bm{\mu}$ or natural parameter $\
 \end{enumerate}
 
 \section{Cost Function based Prediction Market with Bayesian Traders}
-Based on what we have in previous sections, we could simulate the prediction market by a python program.
+Based on what we have in previous sections, we could simulate the prediction market by a Python program.
 
-For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{market-maker} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
+For the setup, there would be a group of Bayesian agents (the number of agents as hyper-parameter would be an input for the program), a market maker and an executable program driving the market. They are explained in Sec~\ref{Bayesian-agents}, Sec~\ref{trading-precedure} and Sec~\ref{main-executable}. The dataset the market is based on is subject to Bernoulli distribution.
 
 \subsection{Bayesian Agents}\label{Bayesian-agents}
 Each Bayesian agents would be initialized with several data points, based on which he would form his prior $p(\boldsymbol{\eta}; \boldsymbol{\chi}, \nu)$. The dataset is subject to Bernoulli distribution, %based on  equation in Helen's part
@@ -249,6 +278,7 @@ The agent can also derive the amount of outstanding shares $\eta$ from the curre
 Based on % equation Helen's part.
 $$\xi(\eta+\delta)=\frac{\nu m \chi+\sum_{n=1}^{m}x_n}{\nu m+m}$$ the agent would be able to decide $\delta$, the amount he would like to sell is
 $$
+
     \delta=\ln{(\frac{\nu m \chi+\sum_{n=1}^{m}x_n}{\nu m+m-(\nu m \chi+\sum_{n=1}^{m}x_n)})}-\eta
 $$
 
@@ -257,11 +287,12 @@ $$
 
 % The market maker holds the sufficient statistic $\phi(x) = x$, cost function for the market $C(\theta) = - \log (- \theta)$ and price function $p = - 1 / \theta$. He would keep track of number of trades, outstanding security amount and current market price when the market runs.
 
+
 \subsection{Executable Program}\label{main-executable}
 The driving program takes agent number and max iteration number as hyper-parameters. The complete dataset is divided into two parts as random chosen data in the first part would be assigned to agents to form their priors, data in the second part would be fed to agents when they intend to enter the market.
 
 Each agent comes into the market iteratively with the total number of iteration not exceeding max iteration number in program arguments. The interval between each agent's arrival is subject to Poisson distribution.  % The Poisson distribution part might be dismissed since the data is not time serializable. 
-As discussed in Sec~\ref{Bayesian-agents} and Sec~\ref{market-maker}, each agent would update their belief and then trade with market maker. The final market price is considered as the aggregated belief among agents.
+As discussed in Sec~\ref{Bayesian-agents} and Sec~\ref{trading-precedure}, each agent would update their belief and then trade with market maker. The final market price is considered as the aggregated belief among agents.
 
 
 \end{document}
