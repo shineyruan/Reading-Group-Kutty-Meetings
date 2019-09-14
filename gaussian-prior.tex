@@ -1,0 +1,81 @@
+\documentclass[letterpaper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{geometry,indentfirst}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+
+\begin{document}
+\begin{center}
+    \textbf{\Large Conjugate Prior for Univariate Gaussian Distribution\\ with Fixed Variance}
+\end{center}
+
+\section*{Problem Statement}
+Considering a univariate Gaussian distribution with fixed variance ($\sigma=1$) that:
+\[ p(x;\mu)=\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{(x-\mu)^2}{2} \right), \]
+we have already known that its conjugate prior must be \[p(\mu;m,v)=\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{(\mu-m)^2}{2v^2} \right).\]
+
+Since it is an exponential family distribution of general form $p(x;\theta)=\exp\left( \langle\theta,x\rangle-T(\theta) \right)$, its conjugate prior must have the geneal form of $p(\theta;n,\nu)=\exp\left( \langle n\nu,\mu\rangle+nT(\theta)-\psi(\nu,n) \right).$ We wish to calculate $n$ and $\nu$ in terms of $m$ and $v$, in order to finish our simulation of prediction market activities in terms of a univariate Gaussian event with fixed variance.
+
+\section*{Derivations}
+\paragraph{Rewrite Gaussian distribution in exponential family form.}~
+
+From the traditional Gaussian form we have:
+\begin{align*}
+    p(x;\mu)&=\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{(x-\mu)^2}{2} \right)\\
+    &=\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{x^2}{2}+\mu x-\frac{\mu^2}{2} \right)\\
+    &=\frac{\exp\left( -x^2/2 \right)}{\sqrt{2\pi}}\exp\left( \mu x-\frac{\mu^2}{2} \right)\\
+    &=h(x)\exp\left( \langle\mu,x\rangle-T(\mu) \right).
+\end{align*}
+Therefore we have the base measure and the log-partition function:
+\begin{align*}
+    h(x)&=\frac{\exp(-x^2/2)}{\sqrt{2\pi}},\\
+    T(\mu)&=\frac{\mu^2}{2}.
+\end{align*}
+\newpage
+\paragraph{Decide each element in the prior from general form.}~
+
+From the traditional form of prior we know:
+\begin{align*}
+    p(\mu;m,v)&=\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{(\mu-m)^2}{2v^2} \right)\\
+    &=\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{1}{2v^2}\mu^2+\frac{m}{v^2}\mu-\frac{m^2}{2v^2} \right)\\
+    &=\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{1}{v^2}T(\mu)+\frac{m}{v^2}\mu-\frac{m^2}{2v^2} \right)\\
+    &=h(\mu)\exp\left( \langle n\nu,\mu\rangle+nT(\mu)-\psi(n,\nu) \right).
+\end{align*}
+Therefore we know that 
+\begin{align*}
+    n&=-\frac{1}{v^2}\\
+    \nu&=-m\\
+    \psi(\nu,n)&=\frac{m^2}{2v^2}.
+\end{align*}
+
+\section*{Validation}
+We can validate our results by deriving the posterior with respect to $N$ data points from a Gaussian distribution.
+
+Assume that there is a set of $N$ points $S=\left\{x_i \right\}_{i=1}^N$ such that $$p(x_i;\mu)=\frac{\exp(-x^2/2)}{\sqrt{2\pi}}\exp\left( \mu x_i-\frac{\mu^2}{2} \right)$$ and $\mu$ follows the exact prior mentioned above. Then we will have the posterior:
+\begin{align*}
+    p(\mu;m,v|x_1,\ldots,x_N)&=\frac{1}{\sqrt{2\pi}v}\exp\left( \begin{bmatrix}
+        m/v^2\\-1/v^2
+    \end{bmatrix}\cdot\begin{bmatrix}
+        \mu\\T(\mu)
+    \end{bmatrix}-\frac{m^2}{2v^2} \right)\prod_{i=1}^N\frac{\exp(-x^2/2)}{\sqrt{2\pi}}\exp\left( \mu x_i-\frac{\mu^2}{2} \right)\\
+    &=h(\mu|x_1,\ldots,x_N)\exp\left( \begin{bmatrix}
+        m/v^2\\-1/v^2
+    \end{bmatrix}\cdot\begin{bmatrix}
+        \mu\\T(\mu)
+    \end{bmatrix}-\frac{m^2}{2v^2} \right)\exp\left( \mu\sum_{i=1}^Nx_i-\frac{N}{2}\mu^2 \right)\\
+    &=h(\mu|x_1,\ldots,x_N)\exp\left( \begin{bmatrix}
+        \dfrac{m}{v^2}+\sum_{i=1}^Nx_i\\~\\-\dfrac{1}{v^2}-N
+    \end{bmatrix}\cdot\begin{bmatrix}
+        \mu\\~\\~\\T(\mu)
+    \end{bmatrix}-\frac{m^2}{2v^2} \right)\\&=h(\mu|x_1,\ldots,x_N)\exp\left( \begin{bmatrix}
+        \dfrac{m}{v^2}+\sum_{i=1}^Nx_i\\~\\-\dfrac{1}{v^2}-N
+    \end{bmatrix}\cdot\begin{bmatrix}
+        \mu\\~\\~\\T(\mu)
+    \end{bmatrix}-\psi(\nu,n) \right)
+\end{align*}
+which is still a Gaussian distribution.
+
+Therefore from our derivation we can see that for a univariate Gaussian distribution with $\sigma^2=1$, $$n=-\frac{1}{v^2},\qquad \nu=-m,\qquad\psi(\nu,n)=\frac{m^2}{2v^2}.$$
+\end{document}
