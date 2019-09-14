@@ -53,7 +53,7 @@ Therefore we know that
 \section*{Validation}
 We can validate our results by deriving the posterior with respect to $N$ data points from a Gaussian distribution.
 
-Assume that there is a set of $N$ points $S=\left\{x_i \right\}_{i=1}^N$ such that $$p(x_i;\mu)=\frac{\exp(-x^2/2)}{\sqrt{2\pi}}\exp\left( \mu x_i-\frac{\mu^2}{2} \right)$$ and $\mu$ follows the exact prior mentioned above. Then we will have the posterior:
+Assume that there is a set of $N$ points $S=\left\{x_i \right\}_{i=1}^N$ such that $$p(x_i;\mu)=\frac{\exp(-x_i^2/2)}{\sqrt{2\pi}}\exp\left( \mu x_i-\frac{\mu^2}{2} \right)$$ and $\mu$ follows the exact prior mentioned above. Then we will have the posterior:
 \begin{align*}
     p(\mu;m,v|x_1,\ldots,x_N)&=\frac{1}{\sqrt{2\pi}v}\exp\left( \begin{bmatrix}
         m/v^2\\-1/v^2
