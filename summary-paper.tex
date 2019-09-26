@@ -94,106 +94,73 @@ When it is written in the form of the conjugate prior
 \end{equation}
 From equation \ref{eq:bernoulli} we can see that $\nu$ corresponds to $a+b-2$ here and $\bm{\chi}$ corresponds to $\frac{a-1}{a+b-2}$.
 \subsubsection{Normal Distribution}
-Given that the conjugate priors for exponential family distributions are of the form $p(\boldsymbol{\eta} | \boldsymbol{\chi}, \nu)=f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}$, we were trying to find the $\nu$ and $\chi$ for univariate Gaussian distribution given that the variance $\sigma^2$ is fixed.
+\subsubsection*{Problem Statement}
+Considering a univariate Gaussian distribution with fixed variance ($\sigma=1$) that:
+\[ p(x;\mu)=\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{(x-\mu)^2}{2} \right), \]
+we have already known that its conjugate prior must be \[p(\mu;m,v)=\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{(\mu-m)^2}{2v^2} \right).\]
 
-The probability density function of univariate Gaussian distribution is given by
-\begin{equation}\label{eq:gaussian}
-    p(x|\mu)=\frac{1}{\sqrt{2 \pi \sigma^{2}}} e^{-\frac{(x-\mu)^{2}}{2 \sigma^{2}}}
-\end{equation}
-First we can start by proving that the conjugate prior for Gaussian distribution is also a Gaussian distribution (when the variance is fixed).
-\begin{displaymath}
-    \begin{array}{l}{p(x | \mu) \sim N\left(\mu, \sigma^{2}\right)} \\ {p(\mu) \sim N\left(\mu_{0}, \sigma_{0}^{2}\right)}\end{array}
-\end{displaymath}
-Suppose $D$ is the set of data points that we have observed. We have
-\begin{equation}\label{eq:posterior}
-    \begin{aligned}
-        p(\mu | \mathcal{D}) & \propto  \prod_{i=1}^{N} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left\{-\frac{1}{2}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^{2}\right\} \times \frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\} \\
-                             & \propto \exp\left\{-\frac{1}{2}\left[\sum_{i=1}^{N}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^{2}+\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right]\right\}                                                                                               \\
-                             & \propto \exp \left\{-\frac{1}{2}\left[\left(\frac{N}{\sigma^{2}}+\frac{1}{\sigma_{0}^{2}}\right) \mu^{2}-2\left(\frac{\sum_{i=1}^{N} x^{(i)}}{\sigma^{2}}+\frac{\mu_{0}}{\sigma_{0}^{2}}\right) \mu\right]\right\}
-    \end{aligned}
-\end{equation}
-We can see that equation \ref{eq:posterior} can be easily written in the form of a Gaussian distribution if we extract multiple from the coefficient in the front.
+Since it is an exponential family distribution of general form $p(x;\theta)=\exp\left( \langle\theta,x\rangle-T(\theta) \right)$, its conjugate prior must have the geneal form of $p(\theta;n,\nu)=\exp\left( \langle n\nu,\mu\rangle+nT(\theta)-\psi(\nu,n) \right).$ We wish to calculate $n$ and $\nu$ in terms of $m$ and $v$, in order to finish our simulation of prediction market activities in terms of a univariate Gaussian event with fixed variance.
 
-\ul{Can all this be still written in the form of exponential family distribution and exponential family distribution's conjugate priors?}
+\subsubsection*{Derivations}
+\paragraph{Rewrite Gaussian distribution in exponential family form.}~
 
-We want to write the prior
-$$\frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\}$$ in the form of $p(\boldsymbol{\eta} | \boldsymbol{\chi}, \nu)=f(\boldsymbol{\chi}, \nu) g(\boldsymbol{\eta})^{\nu} \exp \left\{\nu \boldsymbol{\eta}^{\mathrm{T}} \boldsymbol{\chi}\right\}$, and the posterior 
-\begin{displaymath}
-\prod_{i=1}^{N}\frac{1}{\sqrt{2\pi}\sigma}\exp\left\{-\frac{1}{2}\left(\frac{x^{(i)}-\mu}{\sigma}\right)^2\right\}
-\end{displaymath} in the form of $p(\mathbf{x}|\bm{\eta})=\left(\prod_{n=1}^{N}h(\mathbf{x}_n)\right)g(\bm{\eta})^{N}\exp\left\{\bm{\eta}^T\sum_{n=1}^{N}\mathbf{u}(\mathbf{x}_n)\right\}$.
-
-\textbf{We can first start with priors.}
-\begin{equation}\label{eq:deduction}
-    \begin{split}
-        \frac{1}{\sqrt{2 \pi} \sigma_{0}} \exp \left\{-\frac{1}{2}\left(\frac{\mu-\mu_{0}}{\sigma_{0}}\right)^{2}\right\}&=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{-\frac{\mu^2-2{\mu}_0\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}
-    \end{split}
-\end{equation}
-From the equation above we can deduce that the $\boldsymbol{\eta}$ should be $
-    \begin{bmatrix}
-        \mu   \\
-        \mu^2 \\
-    \end{bmatrix}$.
-\underline{Is this OK?}
-Continue with Eq. \ref{eq:deduction},
-\begin{equation}\label{eq:deduce}
-    \begin{split}
-        \frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{-\frac{\mu^2-2{\mu}_0\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}&=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp \left\{\boldsymbol{\eta}^T\begin{bmatrix}
-            \frac{\mu_0}{{\sigma_0}^2} \\
-            -\frac{1}{2{\sigma_0}^2}   \\
-        \end{bmatrix}-\frac{{\mu_0}^2}{2{\sigma_0}^2}\right\}\\
-        &=\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{\left(\frac{-{\mu_0}^2}{2{\sigma_0}^2}\right)}\exp{\left[\boldsymbol{\eta}^T\begin{bmatrix}
-                    \frac{\mu_0}{{\sigma_0}^2} \\
-                    -\frac{1}{2{\sigma_0}^2}   \\
-                \end{bmatrix}\right] }
-    \end{split}
-\end{equation}
-We know from equation \ref{eq:deduce} that we need $\mu$ outside $\exp$ to construct $g(\boldsymbol{\eta})$.
-
-If we create two helper parameters $\alpha,\beta$ to help us split the coefficients of $\mu$ and $\mu^2$, we'll have
-\begin{equation}
-    \begin{split}
-        \frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{\left(\frac{-{\mu_0}^2}{2{\sigma_0}^2}\right)}\exp{\left[\boldsymbol{\eta}^T\begin{bmatrix}
-                    \frac{\mu_0}{{\sigma_0}^2} \\
-                    -\frac{1}{2{\sigma_0}^2}   \\
-                \end{bmatrix}\right]}
-        =\frac{1}{\sqrt{2 \pi} \sigma_{0}}\exp{\left[\frac{\alpha}{{\sigma_0}^2}{\mu}^2+\frac{\beta\mu_0}{{\sigma_0}^2}\mu\right]\left\{-\frac{(1+2\alpha)\mu^2-2{\mu_0}(1-\beta)\mu+{\mu_0}^2}{2{\sigma_0}^2}\right\}}
-    \end{split}
-\end{equation}
-We can assume that $\nu$ here is the common denominator of $\frac{\alpha}{{\sigma_0}^2}$ and $\frac{\beta\mu_0}{{\sigma_0}^2}$, which is $\frac{1}{{\sigma_0}^2}$. Under this assumption $$g(\boldsymbol{\eta})=\exp(\alpha{\boldsymbol{\eta}}_2+\beta\mu_0{\boldsymbol{\eta}}_1).$$
-\ul{Unfortunately, there's so far no way for us to determine the values of $\alpha$ and $\beta$.}
-
-\textbf{When it comes to the posterior}, we first have to tidy up the original expression and get
+From the traditional Gaussian form we have:
 \begin{align*}
-    \prod_{i=1}^N\frac{1}{\sqrt{2\pi}\sigma}\exp\left\{ -\frac{1}{2}\left( \frac{x^{(i)}-\mu}{\sigma} \right)^2\right\}&=\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N\exp\left\{ -\frac{1}{2\sigma^2}\left[ \sum_{i=1}^N\left( x^{(i)} \right)^2-2\mu\sum_{i=1}^N x^{(i)}+N\mu^2 \right]\right\}\\
-    &=\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N\exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^N\left( x^{(i)} \right)^2\right\}\exp\left\{ \frac{\mu}{\sigma^2}\sum_{i=1}^N x^{(i)}-\frac{N}{2\sigma^2}\mu^2\right\}
+    p(x;\mu)&=\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{(x-\mu)^2}{2} \right)\\
+    &=\frac{1}{\sqrt{2\pi}}\exp\left( -\frac{x^2}{2}+\mu x-\frac{\mu^2}{2} \right)\\
+    &=\frac{\exp\left( -x^2/2 \right)}{\sqrt{2\pi}}\exp\left( \mu x-\frac{\mu^2}{2} \right)\\
+    &=h(x)\exp\left( \langle\mu,x\rangle-T(\mu) \right).
 \end{align*}
-Recall our goal: $p(\mathbf{x}|\bm{\eta})=\left(\prod_{n=1}^{N}h(\mathbf{x}_n)\right)g(\bm{\eta})^{N}\exp\left\{\bm{\eta}^T\sum_{n=1}^{N}\mathbf{u}(\mathbf{x}_n)\right\}$, since from prior $\bm{\eta}=\begin{bmatrix}
-    \mu\\\mu^2
-\end{bmatrix}$, we have to separate a term that contains $N,\mu,\mu^2$ for $g(\bm{\eta})^N$. Again we wish to create some helper parameters $\alpha'$ and $\beta'$ such that the expression becomes
+Therefore we have the base measure and the log-partition function:
 \begin{align*}
-    \left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N&\exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^N\left( x^{(i)} \right)^2\right\}\exp\left\{ \alpha'N\mu\sum_{i=1}^N x^{(i)}+\beta'N\mu^2 \right\}\\
-    &\exp\left\{ \left( \frac{\mu}{\sigma^2}\sum_{i=1}^N x^{(i)}-\alpha'N\mu\sum_{i=1}^N x^{(i)} \right)-\left( \beta'N\mu^2+\frac{N}{2\sigma^2}\mu^2 \right)\right\}\\
-    =\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N&\exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^N\left( x^{(i)} \right)^2\right\}\cdot\left( \alpha'\mu\sum_{i=1}^N x^{(i)}+\beta'\mu^2 \right)^N\\
-    &\exp\left\{ \mu\left( \frac{1}{\sigma^2}\sum_{i=1}^N x^{(i)}-\alpha'N\sum_{i=1}^N x^{(i)} \right)-\mu^2\left( \beta'N+\frac{N}{2\sigma^2} \right)\right\}.
+    h(x)&=\frac{\exp(-x^2/2)}{\sqrt{2\pi}},\\
+    T(\mu)&=\frac{\mu^2}{2}.
+\end{align*}
+\newpage
+\paragraph{Decide each element in the prior from general form.}~
+
+From the traditional form of prior we know:
+\begin{align*}
+    p(\mu;m,v)&=\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{(\mu-m)^2}{2v^2} \right)\\
+    &=\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{1}{2v^2}\mu^2+\frac{m}{v^2}\mu-\frac{m^2}{2v^2} \right)\\
+    &=\frac{1}{\sqrt{2\pi}v}\exp\left( -\frac{1}{v^2}T(\mu)+\frac{m}{v^2}\mu-\frac{m^2}{2v^2} \right)\\
+    &=h(\mu)\exp\left( \langle n\nu,\mu\rangle+nT(\mu)-\psi(n,\nu) \right).
+\end{align*}
+Therefore we know that 
+\begin{align*}
+    n&=-\frac{1}{v^2}\\
+    \nu&=-m\\
+    \psi(\nu,n)&=\frac{m^2}{2v^2}.
 \end{align*}
 
-With one-to-one correspondence with the goal and we can find that 
+\subsubsection*{Validation}
+We can validate our results by deriving the posterior with respect to $N$ data points from a Gaussian distribution.
+
+Assume that there is a set of $N$ points $S=\left\{x_i \right\}_{i=1}^N$ such that $$p(x_i;\mu)=\frac{\exp(-x_i^2/2)}{\sqrt{2\pi}}\exp\left( \mu x_i-\frac{\mu^2}{2} \right)$$ and $\mu$ follows the exact prior mentioned above. Then we will have the posterior:
 \begin{align*}
-    \prod_{n=1}^N h(\mathbf{x_n})&=\left( \frac{1}{\sqrt{2\pi}\sigma} \right)^N\exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^N\left( x^{(i)} \right)^2\right\}\\
-    g\left( \begin{bmatrix}
-        \mu\\~\\\mu^2
-    \end{bmatrix} \right)&=\begin{bmatrix}
-        \mu\\~\\\mu^2
+    p(\mu;m,v|x_1,\ldots,x_N)&=\frac{1}{\sqrt{2\pi}v}\exp\left( \begin{bmatrix}
+        m/v^2\\-1/v^2
     \end{bmatrix}\cdot\begin{bmatrix}
-        \alpha'\sum_{i=1}^N x^{(i)}\\~\\\beta'
-    \end{bmatrix}\\
-    \sum_{n=1}^N\mathbf{u}(\mathbf{x_n})&=\begin{bmatrix}
-        \left( \frac{1}{\sigma^2}-\alpha'N \right)\sum_{i=1}^N x^{(i)}\\
-        ~\\
-        \beta'N+\frac{N}{2\sigma^2}
-    \end{bmatrix}.
+        \mu\\T(\mu)
+    \end{bmatrix}-\frac{m^2}{2v^2} \right)\prod_{i=1}^N\frac{\exp(-x^2/2)}{\sqrt{2\pi}}\exp\left( \mu x_i-\frac{\mu^2}{2} \right)\\
+    &=h(\mu|x_1,\ldots,x_N)\exp\left( \begin{bmatrix}
+        m/v^2\\-1/v^2
+    \end{bmatrix}\cdot\begin{bmatrix}
+        \mu\\T(\mu)
+    \end{bmatrix}-\frac{m^2}{2v^2} \right)\exp\left( \mu\sum_{i=1}^Nx_i-\frac{N}{2}\mu^2 \right)\\
+    &=h(\mu|x_1,\ldots,x_N)\exp\left( \begin{bmatrix}
+        \dfrac{m}{v^2}+\sum_{i=1}^Nx_i\\~\\-\dfrac{1}{v^2}-N
+    \end{bmatrix}\cdot\begin{bmatrix}
+        \mu\\~\\~\\T(\mu)
+    \end{bmatrix}-\frac{m^2}{2v^2} \right)\\&=h(\mu|x_1,\ldots,x_N)\exp\left( \begin{bmatrix}
+        \dfrac{m}{v^2}+\sum_{i=1}^Nx_i\\~\\-\dfrac{1}{v^2}-N
+    \end{bmatrix}\cdot\begin{bmatrix}
+        \mu\\~\\~\\T(\mu)
+    \end{bmatrix}-\psi(\nu,n) \right)
 \end{align*}
-\ul{However there is still no way to detemine the exact values of $\alpha'$ and $\beta'$.}
+which is still a Gaussian distribution.
+
+Therefore from our derivation we can see that for a univariate Gaussian distribution with $\sigma^2=1$, $$n=-\frac{1}{v^2},\qquad \nu=-m,\qquad\psi(\nu,n)=\frac{m^2}{2v^2}.$$
 
 \newpage
 \section{Scoring Rules}
